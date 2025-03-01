@@ -400,14 +400,6 @@ function set_data(text, data) {
         return;
     text.data = data;
 }
-function set_style(node, key, value, important) {
-    if (value == null) {
-        node.style.removeProperty(key);
-    }
-    else {
-        node.style.setProperty(key, value, important ? 'important' : '');
-    }
-}
 function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
     const e = document.createEvent('CustomEvent');
     e.initCustomEvent(type, bubbles, cancelable, detail);
@@ -3137,7 +3129,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (129:4) {#if mobileNavOpen}
+// (128:4) {#if mobileNavOpen}
 function create_if_block(ctx) {
 	let nav;
 	let t;
@@ -3270,7 +3262,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (131:8) {#each site_nav as { link }}
+// (130:8) {#each site_nav as { link }}
 function create_each_block(ctx) {
 	let a;
 	let t_value = /*link*/ ctx[7].label + "";
@@ -3351,7 +3343,11 @@ function create_fragment(ctx) {
 	let if_block1 = current_block_type_1 && current_block_type_1(ctx);
 
 	icon = new Component$1({
-			props: { height: "30", icon: "eva:menu-outline" }
+			props: {
+				height: "30",
+				icon: "eva:menu-outline",
+				style: "color:#333;"
+			}
 		});
 
 	let if_block2 = /*mobileNavOpen*/ ctx[2] && create_if_block(ctx);
@@ -3407,13 +3403,7 @@ function create_fragment(ctx) {
 			if (if_block1) if_block1.l(a1_nodes);
 			a1_nodes.forEach(detach);
 			t2 = claim_space(div1_nodes);
-
-			button = claim_element(div1_nodes, "BUTTON", {
-				id: true,
-				style: true,
-				"aria-label": true
-			});
-
+			button = claim_element(div1_nodes, "BUTTON", { id: true, "aria-label": true });
 			var button_nodes = children(button);
 			claim_component(icon.$$.fragment, button_nodes);
 			button_nodes.forEach(detach);
@@ -3431,7 +3421,6 @@ function create_fragment(ctx) {
 			attr(a1, "href", "/");
 			attr(a1, "class", "logo svelte-1q35tw8");
 			attr(button, "id", "open");
-			set_style(button, "color", "#333", 1);
 			attr(button, "aria-label", "Open mobile navigation");
 			attr(div1, "class", "mobile-nav svelte-1q35tw8");
 			attr(header, "class", "section-container svelte-1q35tw8");
