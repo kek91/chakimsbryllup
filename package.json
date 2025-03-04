@@ -1,0 +1,16 @@
+{
+    "name": "chakimsbryllup",
+    "version": "0.1.0",
+    "description": "Frontend website for chakimsbryllup.no",
+    "main": "index.html",
+    "scripts": {
+      "build": "echo ok"
+    },
+    "author": "Kim Eirik Kvassheim",
+    "license": "MIT",
+    "dependencies": {
+    },
+    "devDependencies": {
+    }
+  }
+  

@@ -1,232 +1,462 @@
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta name="generator" content="Primo" />
-      <!-- HEAD_svelte-e4q2sp_START --><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="https://jcrecfidayhtaohoodzb.supabase.co/storage/v1/object/public/images/b2f10ec6-8a83-40a1-b1c2-ef1ef5dafe28/1729628470000favicon.ico"><script defer src="https://cloud.umami.is/script.js" data-website-id="1bd3571b-23e4-4b9c-b41a-9ec40a3afc8f"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Oooh+Baby&display=swap" rel="stylesheet"><style>/* Reset & standardize default styles */
-@import url("https://unpkg.com/@primo-app/primo@1.3.64/reset.css") layer;
+<!DOCTYPE html>
+<html lang="en">
 
-/* Design tokens (apply to components) */
-:root {
-  /* Custom theme options */
-  --color-accent: rebeccapurple;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="resources/1729628470000favicon.ico">
+    <title>ChaKims Bryllup</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <script defer src="https://cloud.umami.is/script.js" data-website-id="1bd3571b-23e4-4b9c-b41a-9ec40a3afc8f"></script> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Oooh+Baby&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
 
-  /* Base values */
-  --box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.2);
-  --border-radius: 8px;
-  --border-color: #cbcace;
-}
-html, body {
-  border:6px inset #78866B;
-}
-/* Root element (use instead of `body`) */
-#page {
-  font-family: system-ui, sans-serif;
-  color: white;
-  line-height: 1.2;
-  font-size: 1.125rem;
-  
-  /* background: black; */
-  /* background:url("https://jcrecfidayhtaohoodzb.supabase.co/storage/v1/object/public/images/b2f10ec6-8a83-40a1-b1c2-ef1ef5dafe28/1735846084700chakims_bg.png");
-  background-size: cover; */
-  
-  background: rgb(255,249,241);
-  background: linear-gradient(180deg, rgba(255,249,241,1) 0%, rgba(230,202,174,1) 100%);
+<body>
 
-  /* background:#F0E2B6; */
-}
+    <header style="background-image:url(resources/Snapchat-1208917324_small.jpg);">
 
-/* Elements */
-.section-container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 5rem 2rem;
-}
+        <nav class="navbar navbar-expand-lg bg-nav-custom">
+            <div class="container-fluid">
+                <a class="navbar-brand font-greatvibes" href="#forsiden" onclick="navigateToPage('forsiden')">Chakims
+                    bryllup</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#forsiden"
+                                onclick="navigateToPage('forsiden')">Forsiden</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#praktisk-info" onclick="navigateToPage('praktisk-info')">Praktisk info</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#kart" onclick="navigateToPage('kart')">Kart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#program" onclick="navigateToPage('program')">Program</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#reisetips" onclick="navigateToPage('reisetips')">Reisetips</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#galleri" onclick="navigateToPage('galleri')">Galleri</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-a.link {
-  line-height: 1.3;
-  font-weight: 400;
-  border-bottom: 2px solid;
-  transform: translateY(-2px); /* move link back into place */
-  transition: var(--transition, 0.1s border);
-}
+        <div class="font-greatvibes container my-5 py-5">
+            <h1>Chanett & Kim Eirik</h1>
+            <h2>Vi gifter oss! Velkommen til et magisk bryllup på idylliske Jøa</h2>
+        </div>
 
-a.link:hover {
-    border-color: transparent;
-  }
+    </header>
 
-.heading {
-  font-size: clamp(2rem,10vw, 3rem);
-  font-weight: 500;
-  line-height: 1.3;
-}
 
-.button {
-  color: #111;
-  font-size: 1rem;
-  background: white;
-  border-radius: 2rem;
-  padding: 18px 28px;
-  transition: var(--transition, 0.1s box-shadow);
-  border: 0;
-}
 
-/* reset */
 
-.button:hover {
-    box-shadow: 0 0 0 2px #fff;
-  }
+    <div id="forsiden">
 
-.button.is-inverted {
-    background: black;
-    color: white;
-  }
+        <section id="naaroghvor" class="container p-5">
+            <div class="row">
+                <div class="col-md-6 col-lg-4 my-3">
+                    <div class="card bg-warning-subtle">
+                        <div class="card-body">
+                            <h5 class="card-title fs-5">NÅR</h5>
+                            <p class="card-text fs-2">9. august 2025</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 my-3">
+                    <div class="card bg-warning-subtle">
+                        <div class="card-body">
+                            <h5 class="card-title fs-5">HVOR</h5>
+                            <p class="card-text fs-2">Jøa, Namsos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 my-3">
+                    <div class="card bg-warning-subtle">
+                        <div class="card-body">
+                            <h5 class="card-title fs-5">PÅMELDINGSFRIST</h5>
+                            <p class="card-text fs-2">1. mai 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-/* Content Section */
-.content { 
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 5rem 2rem;
-  line-height: 1.4;
-  font-size: 2rem;
-}
-.content > * {
-    max-width: 600px;
-  }
-.content p {
-    padding: 0.25rem 0;
-  }
-.content img {
-    width: 100%;
-    margin: 2rem 0;
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
-  }
-.content a.link {
-  }
-.content h1 {
-    font-size: 3.5rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-  }
-.content h2 {
-    font-size: 2.25rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-.content h3 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-.content ul {
-    list-style: disc;
-    padding: 0.5rem 0;
-    padding-left: 1.25rem;
-  }
-.content ol {
-    list-style: decimal;
-    padding: 0.5rem 0;
-    padding-left: 1.25rem;
-  }
-.content blockquote {
-    padding: 2rem;
-    box-shadow: var(--box-shadow);
-    border-radius: var(--border-radius);
-  }.content h1 {
-    padding-top: 10rem;
-    max-width: 800px;
-  }
-#page {
-  /* background:url("https://jcrecfidayhtaohoodzb.supabase.co/storage/v1/object/public/images/b2f10ec6-8a83-40a1-b1c2-ef1ef5dafe28/1724454645785Joa-1024x802.jpeg") !important; */
-  /* background-size:cover !important; */
+        <section id="hjertebilde" class="container text-center">
+            <a href="resources/for_evigt.jpg">
+                <img class="heart" src="resources/for_evigt.jpg" alt="For evigt">
+            </a>
+        </section>
 
-  /* background-color: #FAACA8 !important;
-  background-image: linear-gradient(19deg, #FAACA8 0%, #DDD6F3 100%); */
+        <!-- <section id="hjertebilde2" class="container text-center">
+            <a href="resources/for_evigt.jpg">
+                <div class="heart2"></div>
+            </a>
+        </section> -->
 
-  /* background: rgb(255,249,241);
-  background: linear-gradient(180deg, rgba(255,249,241,1) 0%, rgba(230,202,174,1) 100%); */
+        <section id="hilsen" class="container py-5 fs-3">
+            <p>Hei!</p>
+            <p>Regner med siden du er innom her og titter, at du er en av våre flotte gjester.
+                Nå begynner vi å glede oss veldig og vi vil stadig vekk snekre litt på denne siden.
+                Når vi oppdaterer vil vi bruke Facebook gruppen for å si ifra :)</p>
+            <p>Du trodde det kanskje ikke, men etter å ha hilst på kongen og dronningen en varm mai-dag (26.mai), tror
+                du
+                jaggu ikke Kim ble inspirert til å få seg sin egen dronning og satt seg ned på kne... men ingen ring var
+                å
+                se... men så klart ble det ja for det :)</p>
+            <p>Hvis noen har noen bilder av oss fra barn og ungdomstid (eller hva som helst av relevanse) og ønsker å
+                dele det med oss for fremvisning her på hjemmesiden eller på bryllupsdagen så setter vi stor pris på det -
+                klikk på <a href="#galleri">Galleri</a> linken og last opp :)</p>
+            <p>Takk!</p>
+            <p>Husk å klikk på DELTA på facebook arrangementet og kom gjerne med spørsmål og innspill. Det setter to
+                store
+                vimsehuser pris på :D</p>
+            <p>Hjertelig hilsen Chanett & Kim Eirik (ChaKim)</p>
+        </section>
 
-  color:#333;
-}
-</style><!-- HEAD_svelte-e4q2sp_END -->
-      <style>.section-container.svelte-1q35tw8.svelte-1q35tw8{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;padding-bottom:1rem;color:#333 !important}.logo.svelte-1q35tw8.svelte-1q35tw8{font-size:1.5rem;font-weight:600;line-height:1.2}.desktop-nav.svelte-1q35tw8.svelte-1q35tw8{display:none;align-items:center;justify-content:space-between;width:100%}.desktop-nav.svelte-1q35tw8 nav.svelte-1q35tw8{display:flex;gap:2rem}.desktop-nav.svelte-1q35tw8 nav a.link.svelte-1q35tw8{border-color:transparent;transition:border-color 0.1s;font-size:0.95rem}.desktop-nav.svelte-1q35tw8 nav a.link.svelte-1q35tw8:hover{border-color:initial}@media(min-width: 800px){.desktop-nav.svelte-1q35tw8.svelte-1q35tw8{display:flex
-}}.mobile-nav.svelte-1q35tw8.svelte-1q35tw8{display:flex;align-items:center;justify-content:space-between;width:100%;font-weight:500}@media(min-width: 800px){.mobile-nav.svelte-1q35tw8.svelte-1q35tw8{display:none
-}}#popup.svelte-1q35tw8.svelte-1q35tw8{font-size:1.25rem;display:grid;gap:1rem;position:absolute;text-align:center;background-color:var(--background-color, white);box-shadow:var(--box-shadow, 0px 4px 30px rgba(0, 0, 0, 0.1));border-radius:var(--border-radius);inset:0.5rem;bottom:initial;padding:2rem;z-index:1;color:black}#popup.svelte-1q35tw8 button#close.svelte-1q35tw8{position:absolute;right:1rem;top:1rem}
-.section-container.svelte-sp6wob.svelte-sp6wob{text-align:center;color:#333 !important;background-size:cover;background-repeat:no-repeat;width:100%}.heading.svelte-sp6wob.svelte-sp6wob{margin-bottom:3rem;font-size:5rem}.subheading.svelte-sp6wob.svelte-sp6wob{font-size:3rem;margin-bottom:2rem}.heading.svelte-sp6wob.svelte-sp6wob,.subheading.svelte-sp6wob.svelte-sp6wob{font-family:"Great Vibes", serif;font-weight:400;font-style:normal;background:rgba(255,255,255,0.5);border-radius:15px;padding:10px}.cards.svelte-sp6wob.svelte-sp6wob{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit, minmax(2rem, 15rem));justify-content:center}.cards.svelte-sp6wob .card.svelte-sp6wob{display:grid;gap:.5rem;border:0px solid var(--border-color);border-radius:var(--border-radius);padding:1.5rem 2rem;background:rgba(255,255,255,0.5);border-radius:15px;padding:10px}.cards.svelte-sp6wob .card .stat.svelte-sp6wob{color:var(--color-heading);font-size:2rem;font-weight:100}.cards.svelte-sp6wob .card .title.svelte-sp6wob{color:var(--color-heading);font-weight:500}
-.custom-text.svelte-1old3di{max-width:100%;font-size:1.4rem;font-family:serif;font-style:normal}
-.section-container.svelte-16yh4cu{margin:0px auto;padding:0px}.image.svelte-16yh4cu{border-radius:var(--border-radius);max-height:400px;margin:0 auto}img.svelte-16yh4cu{-webkit-mask:radial-gradient(at 70% 31%,#000 29%,#0000 30%),
-   radial-gradient(at 30% 31%,#000 29%,#0000 30%),
-   linear-gradient(#000 0 0) bottom/100% 50% no-repeat;mask:radial-gradient(at 70% 31%,#000 29%,#0000 30%),
-   radial-gradient(at 30% 31%,#000 29%,#0000 30%),
-   linear-gradient(#000 0 0) bottom/100% 50% no-repeat;-webkit-clip-path:polygon(-41% 0,50% 91%, 141% 0);clip-path:polygon(-41% 0,50% 91%, 141% 0)}
-.section-container.svelte-u4b2yy.svelte-u4b2yy{display:grid;place-items:center;text-align:center;margin-top:0px;padding-top:10px;color:#333 !important}.heading.svelte-u4b2yy.svelte-u4b2yy{font-size:3rem;font-weight:100;line-height:1;max-width:850px;margin-bottom:1.5rem}@media(min-width: 700px){.heading.svelte-u4b2yy.svelte-u4b2yy{font-size:4rem
-}}.subheading.svelte-u4b2yy.svelte-u4b2yy{font-size:1.25rem;margin-bottom:2rem}.buttons.svelte-u4b2yy.svelte-u4b2yy{margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:1rem}.my-4.svelte-u4b2yy.svelte-u4b2yy{margin:40px 0px 0px 0px}
-.section-container.svelte-w1hg46{padding-block:2rem}img.svelte-w1hg46{width:100%}
-.custom-text.svelte-1old3di{max-width:100%;font-size:1.4rem;font-family:serif;font-style:normal}</style>
-    </head>
-    <body id="page">
-       
-<div class="section" id="section-3a4b7d3b"><header class="section-container svelte-1q35tw8"><div class="desktop-nav svelte-1q35tw8"><a href="/" class="logo svelte-1q35tw8">ChaKims Bryllup</a>
-    <nav class="svelte-1q35tw8"><a class="link svelte-1q35tw8" href="/">Forsiden</a><a class="link svelte-1q35tw8" href="/praktisk-info">Praktisk info</a><a class="link svelte-1q35tw8" href="/reisetips">Reisetips</a><a class="link svelte-1q35tw8" href="/galleri">Galleri</a></nav></div>
-  <div class="mobile-nav svelte-1q35tw8"><a href="/" class="logo svelte-1q35tw8">ChaKims Bryllup</a>
-    <button id="open" aria-label="Open mobile navigation"></button>
-    </div></header></div> 
-<div class="section" id="section-0208363d"><section class="section-container svelte-sp6wob" style="background-image:url(https://jcrecfidayhtaohoodzb.supabase.co/storage/v1/object/public/images/b2f10ec6-8a83-40a1-b1c2-ef1ef5dafe28/1740933586284Snapchat-1208917324_small.jpg);"><h2 class="heading svelte-sp6wob">Chanett &amp; Kim Eirik</h2>
-  <h3 class="subheading svelte-sp6wob">Velkommen til et magisk bryllup på idylliske Jøa</h3>
-  <div class="cards svelte-sp6wob"><div class="card svelte-sp6wob"><span class="stat svelte-sp6wob">9. august</span>
-      <span class="title svelte-sp6wob">NÅR</span>
-    </div><div class="card svelte-sp6wob"><span class="stat svelte-sp6wob">Jøa, Namsos</span>
-      <span class="title svelte-sp6wob">HVOR</span>
-    </div><div class="card svelte-sp6wob"><span class="stat svelte-sp6wob">10. mars</span>
-      <span class="title svelte-sp6wob">PÅMELDINGSFRIST</span>
-    </div></div></section></div> 
-<div class="section" id="section-93c1ae60"><div class="section"><div class="section-container content"><div class="custom-text svelte-1old3di"><!-- HTML_TAG_START --><p><i>Hei! </p>
-<p>Regner med siden du er innom her og titter, at du er en av våre flotte gjester.
-Nå begynner vi å glede oss veldig og vi vil stadig vekk snekre litt på denne siden.</p>
-<p>Når vi oppdaterer vil vi bruke Facebook gruppen for å si ifra :)</p>
-<p>Du trodde det kanskje ikke, men etter å ha hilst på kongen og dronningen en varm mai-dag (26.mai), tror du jaggu ikke Kim ble inspirert til å få seg sin egen dronning og satt seg ned på kne… men ingen ring var å se… men så klart ble det ja for det :)</p>
-<hr>
-<p>Hvis noen har noen bilder av oss fra barn og ungdomstid (eller hva som helst av relevanse) og ønsker å dele det med oss for fremvisning her på hjemmesiden eller på bryllupsdagen så setter vi stor pris på det - klikk på Bildegalleri linken og last opp :)</p>
-<p>Takk!</p>
-<p>Husk å klikk på DELTA på facebook arrangementet og kom gjerne med spørsmål og innspill. Det setter to store vimsehuser pris på :D</p>
-<p>Hjertelig hilsen Chanett &amp; Kim Eirik (ChaKim)</i></p><!-- HTML_TAG_END --></div></div></div></div> 
-<div class="section" id="section-4192fa03"><div class="section-container svelte-16yh4cu"><feature><img class="image svelte-16yh4cu" src="https://jcrecfidayhtaohoodzb.supabase.co/storage/v1/object/public/images/b2f10ec6-8a83-40a1-b1c2-ef1ef5dafe28/1740306133339FB_IMG_1684705633568.jpg" alt=""></feature></div></div> 
-<div class="section" id="section-2595008b"><header class="section-container svelte-u4b2yy"><h1 class="heading svelte-u4b2yy">Praktisk info</h1>
-  <span class="subheading svelte-u4b2yy">Klikk på linken under for detaljert beskrivelse rundt bryllupsarrangementet</span>
-  <div class="buttons svelte-u4b2yy"><a class="button svelte-u4b2yy" href="/praktisk-info">Praktisk info</a></div>
-  <span class="text_markdown my-4 svelte-u4b2yy"><!-- HTML_TAG_START --><p>Bilde under viser kart over øyen Jøa.<br><br></p>
-<ul>
-<li>Vielsen vil holdes på Fosnes kapell (pkt 19).</li>
-<li>Bryllupsfesten holdes på Segelsund (pkt 2).</li>
-</ul><!-- HTML_TAG_END --></span></header></div> 
-<div class="section" id="section-03c097e6"><div class="section-container svelte-w1hg46"><feature><img src="https://jcrecfidayhtaohoodzb.supabase.co/storage/v1/object/public/images/b2f10ec6-8a83-40a1-b1c2-ef1ef5dafe28/1736976167547Kart-2024.jpg" alt="" class="svelte-w1hg46"></feature></div></div> 
-<div class="section" id="section-14ca8111"><div class="section"><div class="section-container content"><div class="custom-text svelte-1old3di"><!-- HTML_TAG_START --><p>Vi vil gjerne rette en stor takk til Randi og Eirik som står bak Segelsund. Dette er gamle gården til Chanett sin farmor, og vi kunne ikke vært heldigere med tanke på hvem som har overtatt denne plassen og gjort den om til en fantastisk opplevelse på Jøa. Uten dem og deres barn som bistår med masse hadde ikke dette bryllupet vært mulig.</p>
-<p><br></p>
-<div style="text-align:center;">
+        <section id="bildeslideshow" class="container">
 
-Anbefaler å trykke innom Segelsund og Tyr Media om du er nyskjerrig på å se mer:
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="resources/20241016_154556.jpg" class="d-block w-100" alt="Gdansk1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="resources/Snapchat-1661067433.jpg" class="d-block w-100" alt="Loen">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="resources/20241015_130714.jpg" class="d-block w-100" alt="Gdansk2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="resources/Snapchat-1208917324.jpg" class="d-block w-100" alt="Bobil">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Forrige</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Neste</span>
+                </button>
+            </div>
 
-<br><br>
+        </section>
 
-<span style="text-decoration:underline;">
-<a href="https://segelsund.no">Segelsund</a><br><br>
-<a href="https://www.instagram.com/tyr.media">Tyr Media</a><br>
-</span>
-</div><!-- HTML_TAG_END --></div></div></div></div> 
+        <!-- <section id="rsvp" class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h2>RSVP</h2>
+                    <form id="rsvpForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="attending" class="form-label">Will you be attending?</label>
+                            <select class="form-select" id="attending" required>
+                                <option value="">Select...</option>
+                                <option value="yes">Yes, I will be there!</option>
+                                <option value="no">Sorry, I can't make it.</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="guests" class="form-label">Number of Guests</label>
+                            <input type="number" class="form-control" id="guests" min="1" value="1">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit RSVP</button>
+                    </form>
+                    <div id="rsvpMessage" class="mt-3"></div>
+                </div>
+            </div>
+        </section> -->
 
-      <script type="module">
-      import('/_symbols/0f254a31-b0f6-44de-9e69-52e3caf2fce4.js')
-      .then(({default:App}) => {
-        
-            new App({
-              target: document.querySelector('#section-3a4b7d3b'),
-              hydrate: true,
-              props: {"logo":{"image":{"alt":"","url":""},"title":"ChaKims Bryllup"},"site_nav":[{"link":{"url":"/","label":"Forsiden","active":false}},{"link":{"url":"/praktisk-info","label":"Praktisk info","active":false}},{"link":{"url":"/reisetips","label":"Reisetips","active":false}},{"link":{"url":"/galleri","label":"Galleri","active":false}}]}
-            })
-          
-      })
-      .catch(e => console.error(e))
-    </script>
-    </body>
-  </html>
-  
+        <section id="takktilsegelsund" class="container py-5 fs-4">
+            <p>Vi vil gjerne rette en stor takk til Randi og Eirik som står bak Segelsund.
+                Dette er gamle gården til Chanett sin farmor, 
+                og vi kunne ikke vært heldigere med tanke på hvem som har overtatt denne plassen og gjort den om til en fantastisk opplevelse på Jøa. 
+                Uten dem og deres barn som bistår med masse hadde ikke dette bryllupet vært mulig.</p>
+            <p>Anbefaler å trykke innom Segelsund og Tyr Media om du er nyskjerrig på å se mer:</p>
+            <div class="text-center py-1">
+                <a href="https://segelsund.no">Segelsund</a><br>
+                <a href="https://www.instagram.com/tyr.media">Tyr Media</a><br>
+            </div>
+        </section>
+
+    </div> <!-- end forsiden -->
+
+
+
+
+
+    <div id="praktisk-info" class="fs-4">
+
+        <section class="container py-5">
+
+            <h1>Praktisk info</h1>
+
+            <h2 class="mt-5">Gave</h2>
+            <p>Vi ønsker ingen gave til bryllupet - vi blir glade nok for at dere kommer</p>
+
+            <h2 class="mt-5">Meny</h2>
+            <p>Segelsund har satt sammen en fantastisk 3-retters meny med lokal kortreist mat.
+                Hovedrett vil bestå av rådyr kjøtt som er meget mørt og smaker nydelig, ikke den typiske vilt smaken.
+                Kan anbefales på det varmeste! For dere som ikke ønsker dette kan dem tilby et fantastisk vegetar
+                alternativ.</p>
+            <p>Dersom det er noen spesielle behov i forhold til allergier ber vi om at dere oppgir det til oss så vil
+                kjøkkenet ta hensyn til det.</p>
+
+            <h2 class="mt-5">Mobilfri vielse</h2>
+            <div class="row">
+                <div class="col-12 col-md-8 mb-5">
+                    <p>Vi setter kjempestor pris på hvis alle kan la mobiltelefonene/kamera ligge under selve vielsen og
+                        nyte det store øyeblikket med oss.</p>
+                    <p>Vi har egen fotograf og bildene vil selvfølgelig bli delt med alle i etterkant :)</p>
+                    <p>Skjønner hvis noen ønsker å ta private bilder, og det skal det selvfølgelig bli mulighet for, vi
+                        gir beskjed om det.</p>
+                    <p>På forhånd, tusen takk!</p>
+                </div>
+                <div class="col-12 col-md-4 text-center">
+                    <img src="https://i.imgur.com/NbLXriw.png" style="max-width:80%;">
+                </div>
+            </div>
+
+            <br>
+            <h2 class="mt-5">Overnatting</h2>
+            <p>Vi har booket det som er på Jøa og plasserer familier/kjente sammen.
+                Skulle dere ønske å være lengre på øya eller komme tidligere så bare gi beskjed så fikser vi!</p>
+
+            <h2 class="mt-5">Transport</h2>
+            <p>Når det gjelder transport rundt om på øyen under oppholdet så har vi minibuss til rådighet,
+                men vi regner med at flere har med leiebil så vi blir nok nødt til å samordne transport.</p>
+
+            <h2 class="mt-5">Hvorfor Jøa?</h2>
+            <p>Bruden har opphav fra Jøa og vi har tilbrakt alle våre sommere sammen her.
+                Brudgommen ble fort forelsket i den fine naturen, dyrene og ikke minst menneskene på øya.
+                Så når Kim satt seg ned på kne var vi ikke i tvil om sted.</p>
+            <p>Jøa er en bitteliten øy (~200 beboere) som tilhører Namsos kommune.
+                Det er ikke uten grunn at det kalles "Landet i eventyret" (gjort populært av den kjente dikteren Olav
+                Duun som også er født på øya).</p>
+            <p>Ikke bare ønsker vi å invitere dere til bryllup,
+                men tilby en flott opplevelse på øyen som kan tilby fine turområder til fots, på sykkel og til vanns.
+            </p>
+            <p>Dyrelivet er veldig rikt, du vil mest sannsynlig se mange rådyr og elg overalt.
+                På de snaue turene våre har vi også sett rev, hoggorm og sel :)</p>
+            <p>Har du glemt noe fra butikken har øya norges første selvbetjente døgnåpne butikk (skryt skryt hehe).</p>
+
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkasgKimH5Zw_Dz6iJDY4R6hVg4qp9socjGQ&s"
+                style="width:200px;">
+
+            <h2 class="mt-5">Kart</h2>
+
+            <a href="resources/joa_kart.jpg" target="_blank">
+                <span>Klikk på kartet for å åpne i ny fane:</span><br>
+                <img src="resources/joa_kart.jpg" style="max-width:300px;">
+            </a>
+
+        </section>
+
+    </div> <!-- end praktisk-info -->
+
+
+
+
+
+
+    
+    <div id="kart" class="fs-4">
+
+        <section class="container-fluid py-5">
+
+            <div class="container">
+                <h1>Kart</h1>
+                <p>Klikk på kartet for å åpne det i fullskjerm</p>
+                <a href="resources/joa_kart.jpg"> 
+                    <img class="w-100 h-100" src="resources/joa_kart.jpg">
+                </a>
+
+        </section>
+
+    </div> <!-- end kart -->
+
+
+
+
+
+
+
+    <div id="program" class="fs-4">
+
+        <section class="container py-5">
+
+            <h1>Program</h1>
+
+            <h2 class="mt-5">Torsdag 7.august</h2>
+            <ul class="programliste">
+                <li><b>1400 - Innsjekk</b><br>
+                    Velkommen til Jøa! Det er i utgangspunkt ikke noe fast program på torsdagen, 
+                    men vi håper å treffe alle og sørge for at alle får innlosjert seg på sine plasser.
+                </li>
+                <li><b>1900 - Kvelds på Faksdal Pøbb</b><br>
+                    Vi koser oss med litt uformell mingling og kveldskos på Faksdal bryggepøbb.
+                </li>
+            </ul>
+
+            <h2 class="mt-5">Fredag 8.august</h2>
+            <ul class="programliste">
+                <li><b>1000 - Guidet tur til Jøa trappa</b><br>
+                    Vi møter opp ved Seierstad Nærbutikk for å ta en sightseeing rundtur på øya. 
+                    Vi håper så mange som mulig vil være med å gå den nye Jøa trappa. Alle går i sitt tempo :)<br>
+                    Klarer du å finne vårt trappetrinn? :)<br>
+                    Den har ikke vi rekket å gå enda da den ble bygd ifjor, men gleder oss til å se utsikten fra toppen. 
+                    Her blir det tid til å nyte den spektakulæret utsikten og ta noen selfies :)
+                </li>
+                <li><b>1400 - Lunsj og Segelsund Games</b><br>
+                    Vi begynner med en lunsj på Segelsund tett etterfulgt av den prestisjefylte konkurransen Segelsund Games! 
+                    Her byr vi på mange gøyale leker for store og små. 
+                    Det blir artige konkurranser som alle kan være med på.
+                    Segelsund Games er ferdig ca kl 17.
+                </li>
+                <li><b>2000 - Quiz på Bedehuset Bar & Bistro</b><br>
+                    Velkommen til en gøy aften på Bedehuset Bar & Bistro. 
+                    Her er det både bar og kjøkken så vi skal kose oss med middag og quiz.
+                </li>
+            </ul>
+            <b>Dette er såklart valgfritt, men vi håper så mange som mulig vil være med på en eller flere aktiviteter.</b>
+
+            <h2 class="mt-5">Lørdag 9.august</h2>
+            <ul class="programliste">
+                <li><b>???? - Vielse på Fosnes kapell</b><br>
+                    Vielsen vil skje på Fosnes kapell (se punkt 19 på kartet).<br> 
+                    Varighet ca 1,5 time.<br>
+                    Etter vielsen reiser vi tilbake til Segelsund (punkt 2 på kartet).
+                </li>
+                <li><b>???? - Mingling og lek på Segelsund</b><br>
+                    asdasdadadd
+                </li>
+                <li><b>???? - Middag</b><br>
+                    asdasdadadd
+                </li>
+                <li><b>???? - Kake og kaffe</b><br>
+                    asdasdadadd
+                </li>
+                <li><b>???? - Musikk med liveband</b><br>
+                    asdasdadadd
+                </li>
+                <li><b>???? - Festen er slutt</b><br>
+                    Bare tulla! I trøndelag er det ingen stengetid!<br>
+                    <b>Vi ska fæst heilt te sola står opp!</b> <i>- D.D.E</i>
+                </li>
+                
+            </ul>
+            
+
+        </section>
+
+    </div> <!-- end program -->
+
+
+
+
+
+    <div id="reisetips" class="fs-4">
+
+        <section class="container py-5">
+
+            <h1>Reisetips</h1>
+
+            <p>De siste åra har vi jo leid bobil og fartet rundt i norge, selvfølgelig innom Jøa også :)<br>
+                Det er en kjempefin tur som vi tror mange hadde likt.
+            </p>
+            <p>Hvis dere ikke ønsker å kjøre så langt kan man fly til eksempelvis Trondheim og så kjøre de siste 3-4t i bil,
+                eller fly direkte til Namsos flyplass.
+            </p>
+            <p>
+                Fra Namsos til Jøa tar det ca 45min i bil pluss en liten ferjetur på 5 min.
+            </p>
+
+            <div class="row my-3">
+
+                <div class="col-12 col-lg-6 mb-3">
+                    <h2>Oslo - Jøa</h2>
+                    <img src="resources/maps-oslo-joa.png">
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <h2>Grimstad - Jøa</h2>
+                    <img src="resources/maps-grimstad-joa.png">
+                </div>
+            </div>
+
+
+
+        </section>
+
+    </div> <!-- end reisetips -->
+
+
+
+
+
+
+    <div id="galleri" class="fs-4">
+
+        <section class="container-fluid py-5">
+
+            <div class="container">
+                <h1>Galleri</h1>
+                <p>Du kan laste opp bilder til galleriet ved å bruke formen under:</p>
+                <div class="alert alert-danger my-3" role="alert">
+                    Midlertidig stengt - sjekk tilbake litt senere :)
+                </div>
+                <div class="input-group input-group-lg disabled">
+                    <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" disabled>
+                    <button class="btn btn-primary" type="button" id="inputGroupFileAddon04" disabled>Send!</button>
+                </div>
+                <div id="galleriUploadStatus"></div>
+            </div>
+
+            <hr class="my-5">
+
+            <p class="text-center my-3">Klikk på bildene for å åpne de i fullskjerm :)</p>
+
+            <div id="galleryimages"></div>
+
+            <hr class="my-5">
+
+        </section>
+
+    </div> <!-- end galleri -->
+
+
+
+
+
+
+    <!-- <footer class="text-center py-3">
+        <p>&copy; 2025 Chanett & Kim Eirik</p>
+    </footer> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="functions.js"></script>
+</body>
+
+</html>
