@@ -33,6 +33,7 @@ function navigateToPage(page) {
             try {
                 document.getElementById(page).style.display = 'block';
                 window.scrollTo(0,0);
+                document.querySelector(".navbar-toggler").click();
             } catch (e) {
                 // eat exception
             }
@@ -118,7 +119,7 @@ function populateGallery() {
     let html = "";
     html += `<div class="row g-0">`;
     imagesToShow.forEach((img) => {
-        html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${img}');" onclick="location.href='${img}';"></div>`;
+        html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${img}');" onclick="window.open('${img}', '_blank');"></div>`;
     });
     html += `</div`;
 
