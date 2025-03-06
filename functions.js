@@ -17,6 +17,8 @@
 //     document.getElementById('rsvpForm').reset();
 // });
 
+let firstTimeLoad = true;
+
 function navigateToPage(page) {
 
     const pageElements = [
@@ -32,8 +34,19 @@ function navigateToPage(page) {
         if (pageElements[i] === page) {
             try {
                 document.getElementById(page).style.display = 'block';
+                console.log("switching page");
                 window.scrollTo(0,0);
-                document.querySelector(".navbar-toggler").click();
+                if (!firstTimeLoad) {
+                    document.querySelector(".navbar-toggler").click();
+                    console.log("firstTimeLoad is false, toggle menu");
+                } else {
+                    firstTimeLoad = false;
+                    console.log("firstTimeLoad was true, do not toggle menu");
+                }
+                // document.querySelector('.navbar-collapse').classList = '.navbar-collapse .collapse';
+                // document.querySelector('.navbar-collapse').classList = '';
+                // $('#navbarSupportedContent').collapse();
+                console.log("collapsed!");
             } catch (e) {
                 // eat exception
             }
@@ -73,13 +86,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 try {
-    navigation.addEventListener('navigate', () => {
-        setTimeout(() => {
-            setPageFromUrl();
-        },25);
-    });
+    if (window.navigation) {
+        navigation.addEventListener('navigate', () => {
+            setTimeout(() => {
+                setPageFromUrl();
+            },25);
+        });
+    } else {
+        const links = document.querySelectorAll('a');
+        links.forEach(link => {
+            if (link.href.includes("#")) {
+                const url = link.href.split("#")[1].trim();
+                console.log(url);
+                link.addEventListener('click', () => {
+                    navigateToPage(url);
+                });
+            }
+        });
+    }
 } catch (error) {
-    log("FATAL ERROR: Could not add EventListener for navigation navigate: " + JSON.stringify(error));
+    console.log("FATAL ERROR: Could not add EventListener for navigation navigate: " + JSON.stringify(error));
 }
 
 function shuffleArray(array) {

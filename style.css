@@ -87,6 +87,13 @@ img.heart:hover {
     background: rgb(255,249,241);
     background: linear-gradient(180deg, rgba(255,249,241,1) 0%, rgba(230,202,174,1) 100%);
 }
+/* #forsiden {
+    padding-top:-50px;
+    margin-top:-50px;
+} */
+#praktisk-info, #kart, #program, #reisetips, #galleri {
+    padding-top:50px;
+}
 
 /* #galleri img {
     max-height:500px;
@@ -142,7 +149,7 @@ ul.programliste li b {
 
 /** NAV */
 .bg-nav-custom {
-    background:rgba(255,255,255,0.7);
+    background:rgba(255,255,255,0.9);
 }
 a.nav-link {
     font-size:1.2rem;
