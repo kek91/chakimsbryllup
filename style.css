@@ -87,22 +87,24 @@ img.heart:hover {
     background: rgb(255,249,241);
     background: linear-gradient(180deg, rgba(255,249,241,1) 0%, rgba(230,202,174,1) 100%);
 }
-/* #forsiden {
-    padding-top:-50px;
-    margin-top:-50px;
-} */
 #praktisk-info, #kart, #program, #reisetips, #galleri {
     padding-top:50px;
 }
 
-/* #galleri img {
-    max-height:500px;
-    min-height:250px;
-    border:1px solid #906E3E;
+
+.programliste li {
+    background:rgba(0,0,0,0.1);
+    border-radius:30px;
+    padding:10px;
+    list-style:"\2665";
 }
-#galleri img:hover {
-    border:1px solid red;
+/* .programliste li:before {
+    content: "\2665";
+    color: #9c5597;
 } */
+.programliste li img {
+    border-radius:30px;
+}
 
 .galleryimage {
     display:block;
