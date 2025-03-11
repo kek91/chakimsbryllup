@@ -499,11 +499,21 @@
                 <div id="galleriUploadStatus"></div>
             </div>
 
+            <p class="text-center my-5 fs-6">Klikk på bildene for å åpne de i fullskjerm :)</p>
+
             <hr class="my-5">
 
-            <p class="text-center my-3">Klikk på bildene for å åpne de i fullskjerm :)</p>
-
-            <div id="galleryimages"></div>
+            <div id="galleryimages">
+                <div class="text-center">
+                    <button id="manuallyLoadGallery" class="btn btn-primary btn-lg">Klikk her for å laste galleri hvis de ikke vises automatisk</button>
+                </div>
+            </div>
+            <script>
+                document.querySelector("#manuallyLoadGallery").addEventListener('click', (e) => {
+                    e.preventDefault();
+                    populateGallery();
+                })
+            </script>
 
             <hr class="my-5">
 

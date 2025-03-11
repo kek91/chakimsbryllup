@@ -124,6 +124,8 @@ function populateGallery() {
 
         const el = document.querySelector('#galleryimages');
 
+        el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
+
         const images = [
             "resources/20240804_155628.jpg",
             "resources/20240807_122934.jpg",
@@ -144,23 +146,27 @@ function populateGallery() {
             "resources/Snapchat-1661067433.jpg"
         ];
 
-        // const imagesToShow = shuffleArray(images);
+        setTimeout(() => {
 
-        let html = "";
-        html += `<div class="row g-0">`;
-        images.forEach((img) => {
-            html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${img}');" onclick="window.open('${img}', '_blank');"></div>`;
-        });
-        html += `</div`;
+            let html = "";
+            html += `<div class="row g-0">`;
+            images.forEach((img) => {
+                html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${img}');" onclick="window.open('${img}', '_blank');"></div>`;
+            });
+            html += `</div`;
 
-        el.innerHTML = html;
+            el.innerHTML = html;
+
+        },250);
 
     } catch (error) {
+
         console.log("en feil oppstod, kunne ikke legge til bilder i galleri...");
         document.getElementById('galleryimages').innerHTML = `<div class="alert alert-danger my-3" role="alert">
             Beklager, men en feil har oppstått! :(<br>
             Klarte ikke hente bildene...<br><br>
             Feilmelding: ${JSON.stringify(error)}
         </div>`;
+
     }
 }
