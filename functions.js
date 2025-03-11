@@ -119,31 +119,33 @@ function shuffleArray(array) {
 }
 
 function populateGallery() {
-    console.log("populate gallery");
-    const el = document.querySelector('#galleryimages');
-    const images = [
-        "resources/20240804_155628.jpg",
-        "resources/20240807_122934.jpg",
-        "resources/20241015_130714.jpg",
-        "resources/20241016_154143.jpg",
-        "resources/20241016_154556.jpg",
-        "resources/for_evigt.jpg",
-        "resources/Screenshot_20250301_224253_Photos.jpg",
-        "resources/Screenshot_20250301_224312_Photos.jpg",
-        "resources/Snapchat-686363600.jpg",
-        "resources/Snapchat-776564614~2.jpg",
-        "resources/Snapchat-1069945376.jpg",
-        "resources/Snapchat-1183172171.jpg",
-        "resources/Snapchat-1208917324.jpg",
-        "resources/Snapchat-1479250926.jpg",
-        "resources/Snapchat-1496764530.jpg",
-        "resources/Snapchat-1655512974.jpg",
-        "resources/Snapchat-1661067433.jpg"
-    ];
-
-    // const imagesToShow = shuffleArray(images);
-
+    
     try {
+
+        const el = document.querySelector('#galleryimages');
+
+        const images = [
+            "resources/20240804_155628.jpg",
+            "resources/20240807_122934.jpg",
+            "resources/20241015_130714.jpg",
+            "resources/20241016_154143.jpg",
+            "resources/20241016_154556.jpg",
+            "resources/for_evigt.jpg",
+            "resources/Screenshot_20250301_224253_Photos.jpg",
+            "resources/Screenshot_20250301_224312_Photos.jpg",
+            "resources/Snapchat-686363600.jpg",
+            "resources/Snapchat-776564614~2.jpg",
+            "resources/Snapchat-1069945376.jpg",
+            "resources/Snapchat-1183172171.jpg",
+            "resources/Snapchat-1208917324.jpg",
+            "resources/Snapchat-1479250926.jpg",
+            "resources/Snapchat-1496764530.jpg",
+            "resources/Snapchat-1655512974.jpg",
+            "resources/Snapchat-1661067433.jpg"
+        ];
+
+        // const imagesToShow = shuffleArray(images);
+
         let html = "";
         html += `<div class="row g-0">`;
         images.forEach((img) => {
@@ -152,7 +154,13 @@ function populateGallery() {
         html += `</div`;
 
         el.innerHTML = html;
+
     } catch (error) {
         console.log("en feil oppstod, kunne ikke legge til bilder i galleri...");
+        document.getElementById('galleryimages').innerHTML = `<div class="alert alert-danger my-3" role="alert">
+            Beklager, men en feil har oppstått! :(<br>
+            Klarte ikke hente bildene...<br><br>
+            Feilmelding: ${JSON.stringify(error)}
+        </div>`;
     }
 }

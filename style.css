@@ -92,11 +92,26 @@ img.heart:hover {
 }
 
 
+.programliste ul {
+    margin:0;
+    padding:0;
+}
 .programliste li {
     background:rgba(0,0,0,0.1);
     border-radius:30px;
     padding:10px;
-    list-style:"\2665";
+    /* list-style:"\2665"; */
+    list-style:none;
+    margin:0;
+}
+.programinnlegg {
+    background:rgba(0,0,0,0.1);
+    border-radius:30px;
+    padding:10px;
+    margin:2px;
+}
+.programinnlegg img {
+    border-radius:30px;
 }
 /* .programliste li:before {
     content: "\2665";
