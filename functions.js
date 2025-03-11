@@ -119,6 +119,7 @@ function shuffleArray(array) {
 }
 
 function populateGallery() {
+    console.log("populate gallery");
     const el = document.querySelector('#galleryimages');
     const images = [
         "resources/20240804_155628.jpg",
@@ -140,14 +141,18 @@ function populateGallery() {
         "resources/Snapchat-1661067433.jpg"
     ];
 
-    const imagesToShow = shuffleArray(images);
+    // const imagesToShow = shuffleArray(images);
 
-    let html = "";
-    html += `<div class="row g-0">`;
-    imagesToShow.forEach((img) => {
-        html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${img}');" onclick="window.open('${img}', '_blank');"></div>`;
-    });
-    html += `</div`;
+    try {
+        let html = "";
+        html += `<div class="row g-0">`;
+        images.forEach((img) => {
+            html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${img}');" onclick="window.open('${img}', '_blank');"></div>`;
+        });
+        html += `</div`;
 
-    el.innerHTML = html;
+        el.innerHTML = html;
+    } catch (error) {
+        console.log("en feil oppstod, kunne ikke legge til bilder i galleri...");
+    }
 }
