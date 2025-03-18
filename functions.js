@@ -27,7 +27,8 @@ function navigateToPage(page) {
         "program",
         "kart",
         "reisetips",
-        "galleri"
+        "galleri",
+        "gjestebok"
     ];
 
     for (let i = 0; i < pageElements.length; i++) {
@@ -75,6 +76,9 @@ function setPageFromUrl() {
     } else if (url.includes("galleri")) {
         navigateToPage("galleri");
         populateGallery();
+    } else if (url.includes("gjestebok")) {
+        navigateToPage("gjestebok");
+        populateGuestbook();
     } else {
         navigateToPage("forsiden");
     }
@@ -165,6 +169,51 @@ function populateGallery() {
         document.getElementById('galleryimages').innerHTML = `<div class="alert alert-danger my-3" role="alert">
             Beklager, men en feil har oppstått! :(<br>
             Klarte ikke hente bildene...<br><br>
+            Feilmelding: ${JSON.stringify(error)}
+        </div>`;
+
+    }
+}
+
+
+function populateGuestbook() {
+    
+    try {
+
+        const el = document.querySelector('#guestbookentries');
+
+        el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
+
+        const entries = [
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis metus lectus, ultrices nec est quis, pretium commodo tellus. Vivamus posuere vulputate tempor. Donec pulvinar at velit sed mattis. Nulla facilisi. Praesent placerat, nulla ut laoreet molestie, augue turpis placerat augue, vel pretium lectus leo bibendum augue. Maecenas molestie augue quis vulputate luctus. Quisque non est sit amet nisl blandit blandit at vel sem. Maecenas dapibus, arcu sit amet vulputate blandit, metus neque hendrerit mi, semper varius lorem dolor vel elit. Vestibulum ultricies sodales suscipit. Vivamus consectetur nisi vel nunc varius mollis. Ut nulla neque, pretium vitae suscipit et, tincidunt non mauris. Aenean nisl sapien, consequat eget mauris nec, accumsan dictum nisi. Curabitur et erat sed magna efficitur sollicitudin convallis id lorem. Maecenas faucibus, urna eu accumsan bibendum, nulla lacus elementum metus, consequat egestas diam metus eget diam. Pellentesque malesuada sem eget risus iaculis malesuada.",
+            "Sed erat elit, porttitor quis nunc et, semper pretium sapien. Vestibulum placerat nisi eget libero sagittis fermentum. Nulla luctus mattis justo ut molestie. Aliquam elementum risus ut sem imperdiet efficitur. Maecenas in felis lacinia, dignissim eros vitae, vulputate tellus. Proin quis nisl non sapien cursus aliquet. Integer dictum nec leo non eleifend. Proin vitae magna lobortis, consequat erat eget, dapibus nibh. Donec imperdiet pretium lectus ac viverra. Aenean massa dui, molestie vitae consequat vel, pulvinar id velit.",
+            "Praesent sed nisl sit amet eros ultrices lacinia ut in nunc. Suspendisse bibendum bibendum dapibus. Sed semper dictum quam, non ornare augue congue quis. Donec semper ex non dolor luctus pellentesque. Nam dapibus cursus eros ac euismod. Aliquam pretium diam facilisis mauris rhoncus faucibus. Nam vel accumsan orci. Vivamus in velit eu odio ullamcorper efficitur. Proin sodales tristique metus, a volutpat lacus mattis quis. Cras faucibus malesuada felis, a sodales lorem rhoncus lobortis.",
+            "Maecenas et quam odio. Phasellus sodales dui quis metus suscipit, quis elementum nibh feugiat. Nulla nec orci vel lectus elementum scelerisque. Sed a facilisis enim, non imperdiet ligula. Sed vulputate, sem a fringilla malesuada, ante nulla viverra ligula, vel lobortis nisi tellus sed urna. Morbi purus dui, dignissim id nunc eu, semper eleifend diam. Aliquam tristique massa non iaculis scelerisque. Nam scelerisque magna non auctor sollicitudin. Ut id risus in justo tincidunt dignissim quis sed libero. Etiam non nisi vestibulum, sagittis nunc eget, gravida dolor. Nunc sed sollicitudin purus, eu placerat nisi.",
+            "Cras iaculis ultricies condimentum. Maecenas at tempus augue, sit amet ultrices libero. Fusce volutpat mi nec egestas pharetra. Phasellus maximus dignissim libero in maximus. Quisque ligula risus, consequat in magna eu, condimentum pulvinar nibh. Morbi gravida sem risus, vitae fermentum mauris porta vitae. Nam scelerisque gravida feugiat. Duis semper vulputate tortor nec vulputate. Aenean porta diam in feugiat consectetur. Aliquam felis lacus, vulputate at nulla a, vehicula condimentum dolor. Vestibulum tincidunt tellus et blandit ornare."
+        ];
+
+        setTimeout(() => {
+            let html = "";
+            html += `<div class="row p-5">`;
+            entries.forEach((entry) => {
+                html += `<div class="col-md-6 col-lg-4 my-3">
+                    <div class="card bg-warning-subtle">
+                        <div class="card-body">
+                            <p class="card-text">${entry}</p>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            html += `</div`;
+            el.innerHTML = html;
+        },250);
+
+    } catch (error) {
+
+        console.log("en feil oppstod, kunne ikke legge til bilder i galleri...");
+        document.getElementById('guestbookentries').innerHTML = `<div class="alert alert-danger my-3" role="alert">
+            Beklager, men en feil har oppstått! :(<br>
+            Klarte ikke hente innlegg for gjesteboken...<br><br>
             Feilmelding: ${JSON.stringify(error)}
         </div>`;
 
