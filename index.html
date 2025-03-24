@@ -495,11 +495,13 @@
                 <div class="alert alert-danger my-3" role="alert">
                     Midlertidig stengt - sjekk tilbake litt senere :)
                 </div>
-                <div class="input-group input-group-lg disabled">
-                    <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" disabled>
-                    <button class="btn btn-primary" type="button" id="inputGroupFileAddon04" disabled>Send!</button>
-                </div>
-                <div id="galleriUploadStatus"></div>
+                <form id="galleryUploadForm">
+                    <div class="input-group input-group-lg disabled">
+                        <input type="file" class="form-control" id="inputFile" disabled>
+                        <button class="btn btn-primary" type="button" disabled>Send!</button>
+                    </div>
+                </form>
+                <div id="galleryUploadStatus"></div>
             </div>
 
             <p class="text-center my-5 fs-6">Klikk på bildene for å åpne de i fullskjerm :)</p>
@@ -533,15 +535,17 @@
 
             <div class="container">
                 <h1>Gjestebok</h1>
-                <p>Skriv din hilsen under</p>
                 <div class="alert alert-danger my-3" role="alert">
                     Midlertidig stengt - sjekk tilbake litt senere :)
                 </div>
-                <div class="input-group input-group-lg">
-                    <span class="input-group-text">Din hilsen</span>
-                    <textarea class="form-control" aria-label="With textarea" rows="7"></textarea>
-                    <button class="btn btn-primary" type="button" id="inputGroupFileAddon05" disabled>Send</button>
-                  </div>
+
+                <form id="guestbookForm">
+                    <div class="mb-3">
+                      <label for="inputHilsen" class="form-label">Skriv din hilsen under</label>
+                      <textarea class="form-control" aria-label="With textarea" rows="7" id="inputHilsen" disabled></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" disabled>Send</button>
+                </form>
                 <div id="guestbookSendStatus"></div>
             </div>
 

@@ -36,7 +36,7 @@ function navigateToPage(page) {
             try {
                 document.getElementById(page).style.display = 'block';
                 console.log("switching page");
-                window.scrollTo(0,0);
+                window.scrollTo(0, 0);
                 if (!firstTimeLoad) {
                     document.querySelector(".navbar-toggler").click();
                     console.log("firstTimeLoad is false, toggle menu");
@@ -84,7 +84,7 @@ function setPageFromUrl() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log("Chakims bryllup v1.0 :)");
     setPageFromUrl();
 });
@@ -94,7 +94,7 @@ try {
         navigation.addEventListener('navigate', () => {
             setTimeout(() => {
                 setPageFromUrl();
-            },25);
+            }, 25);
         });
     } else {
         const links = document.querySelectorAll('a');
@@ -123,7 +123,7 @@ function shuffleArray(array) {
 }
 
 function populateGallery() {
-    
+
     try {
 
         const el = document.querySelector('#galleryimages');
@@ -161,7 +161,7 @@ function populateGallery() {
 
             el.innerHTML = html;
 
-        },250);
+        }, 250);
 
     } catch (error) {
 
@@ -177,7 +177,7 @@ function populateGallery() {
 
 
 function populateGuestbook() {
-    
+
     try {
 
         const el = document.querySelector('#guestbookentries');
@@ -206,7 +206,7 @@ function populateGuestbook() {
             });
             html += `</div`;
             el.innerHTML = html;
-        },250);
+        }, 250);
 
     } catch (error) {
 
@@ -219,3 +219,55 @@ function populateGuestbook() {
 
     }
 }
+
+
+
+/** Event listener for forms */
+
+document.getElementById('galleryUploadForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const messageDiv = document.getElementById('galleryUploadMessage');
+    const fileInput = document.getElementById('inputFile');
+
+    const files = fileInput.files;
+
+    if (files.length === 0) {
+        messageDiv.innerHTML = '<p>Ingen filer valgt!</p>';
+        return;
+    }
+
+    const formData = new FormData();
+
+    // Append multiple files
+    for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i]); // 'files' should match the backend field name
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/upload', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();
+        messageDiv.innerHTML = result.message;
+        console.log('Uploaded Files:', result.files);
+    } catch (error) {
+        console.error('Error uploading files:', error);
+        messageDiv.innerHTML = 'Failed to upload files';
+    }
+});
+
+document.getElementById('guestbookForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const greeting = document.getElementById('inputHilsen').value;
+    const messageDiv = document.getElementById('guestbookMessage');
+
+    if (greeting) {
+        messageDiv.innerHTML = `<p>Tusen takk, din melding vil straks dukke opp i gjesteboken :)</p>`;
+    } else {
+        messageDiv.innerHTML = `<p>Beklager, det ser ut som at meldingen din er tom... vennligst prøv igjen.</p>`;
+    }
+});
