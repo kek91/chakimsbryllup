@@ -492,7 +492,7 @@
             <div class="container">
                 <h1>Galleri</h1>
                 <p>Du kan laste opp bilder til galleriet ved å bruke formen under:</p>
-                <div class="alert alert-danger my-3" role="alert">
+                <div class="alert alert-warning my-3" role="alert">
                     Midlertidig stengt - sjekk tilbake litt senere :)
                 </div>
                 <form id="galleryUploadForm">
@@ -513,12 +513,6 @@
                     <button id="manuallyLoadGallery" class="btn btn-primary btn-lg">Klikk her for å laste galleri hvis de ikke vises automatisk</button>
                 </div>
             </div>
-            <script>
-                document.querySelector("#manuallyLoadGallery").addEventListener('click', (e) => {
-                    e.preventDefault();
-                    populateGallery();
-                })
-            </script>
 
             <hr class="my-5">
 
@@ -535,7 +529,7 @@
 
             <div class="container">
                 <h1>Gjestebok</h1>
-                <div class="alert alert-danger my-3" role="alert">
+                <div class="alert alert-warning my-3" role="alert">
                     Midlertidig stengt - sjekk tilbake litt senere :)
                 </div>
 
@@ -556,12 +550,6 @@
                     <button id="manuallyLoadGuestbookEntries" class="btn btn-primary btn-lg">Klikk her for å laste gjesteboken hvis det ikke vises automatisk</button>
                 </div>
             </div>
-            <script>
-                document.querySelector("#manuallyLoadGuestbookEntries").addEventListener('click', (e) => {
-                    e.preventDefault();
-                    populateGuestbook();
-                })
-            </script>
 
             <hr class="my-5">
 

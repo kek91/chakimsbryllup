@@ -1,21 +1,4 @@
-// functions.js
-
-// document.getElementById('rsvpForm').addEventListener('submit', function(event) {
-//     event.preventDefault();
-
-//     const name = document.getElementById('name').value;
-//     const attending = document.getElementById('attending').value;
-//     const guests = document.getElementById('guests').value;
-//     const messageDiv = document.getElementById('rsvpMessage');
-
-//     if (attending === 'yes') {
-//         messageDiv.innerHTML = `<p>Thank you, ${name}! We look forward to seeing you and ${guests} guest(s) at our wedding!</p>`;
-//     } else {
-//         messageDiv.innerHTML = `<p>Thank you, ${name}, for letting us know. We'll miss you!</p>`;
-//     }
-
-//     document.getElementById('rsvpForm').reset();
-// });
+/** Navigation stuff */
 
 let firstTimeLoad = true;
 
@@ -35,7 +18,7 @@ function navigateToPage(page) {
         if (pageElements[i] === page) {
             try {
                 document.getElementById(page).style.display = 'block';
-                console.log("switching page");
+                console.log(`Switching page to ${page}`);
                 window.scrollTo(0, 0);
                 if (!firstTimeLoad) {
                     document.querySelector(".navbar-toggler").click();
@@ -44,10 +27,6 @@ function navigateToPage(page) {
                     firstTimeLoad = false;
                     console.log("firstTimeLoad was true, do not toggle menu");
                 }
-                // document.querySelector('.navbar-collapse').classList = '.navbar-collapse .collapse';
-                // document.querySelector('.navbar-collapse').classList = '';
-                // $('#navbarSupportedContent').collapse();
-                console.log("collapsed!");
             } catch (e) {
                 // eat exception
             }
@@ -112,6 +91,11 @@ try {
     console.log("FATAL ERROR: Could not add EventListener for navigation navigate: " + JSON.stringify(error));
 }
 
+
+/** Randomize array items 
+ * EDIT: Not used anymore!
+*/
+
 function shuffleArray(array) {
     for (var i = array.length - 1; i >= 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -121,6 +105,8 @@ function shuffleArray(array) {
     }
     return array;
 }
+
+/** Populate the gallery with all uploaded images */
 
 function populateGallery() {
 
@@ -175,6 +161,7 @@ function populateGallery() {
     }
 }
 
+/** Populate the guestbook with all greetings */
 
 function populateGuestbook() {
 
@@ -194,7 +181,7 @@ function populateGuestbook() {
 
         setTimeout(() => {
             let html = "";
-            html += `<div class="row p-5">`;
+            html += `<div class="row">`;
             entries.forEach((entry) => {
                 html += `<div class="col-md-6 col-lg-4 my-3">
                     <div class="card bg-warning-subtle">
@@ -221,6 +208,21 @@ function populateGuestbook() {
 }
 
 
+
+
+/** Event listeners for loading gallery and guestbook 
+ * For some reason, they wont load automatically on iphone/safari.
+*/
+
+document.querySelector("#manuallyLoadGallery").addEventListener('click', (e) => {
+    e.preventDefault();
+    populateGallery();
+});
+
+document.querySelector("#manuallyLoadGuestbookEntries").addEventListener('click', (e) => {
+    e.preventDefault();
+    populateGuestbook();
+});
 
 /** Event listener for forms */
 
