@@ -492,16 +492,13 @@
             <div class="container">
                 <h1>Galleri</h1>
                 <p>Du kan laste opp bilder til galleriet ved å bruke formen under:</p>
-                <div class="alert alert-warning my-3" role="alert">
-                    Midlertidig stengt - sjekk tilbake litt senere :)
-                </div>
                 <form id="galleryUploadForm">
-                    <div class="input-group input-group-lg disabled">
-                        <input type="file" class="form-control" id="inputFile" disabled>
-                        <button class="btn btn-primary" type="button" disabled>Send!</button>
+                    <div class="input-group input-group-lg">
+                        <input type="file" class="form-control" id="inputFile">
+                        <button type="submit" class="btn btn-primary">Send!</button>
                     </div>
                 </form>
-                <div id="galleryUploadStatus"></div>
+                <div id="galleryUploadStatus" class="text-center"></div>
             </div>
 
             <p class="text-center my-5 fs-6">Klikk på bildene for å åpne de i fullskjerm :)</p>
@@ -529,18 +526,14 @@
 
             <div class="container">
                 <h1>Gjestebok</h1>
-                <div class="alert alert-warning my-3" role="alert">
-                    Midlertidig stengt - sjekk tilbake litt senere :)
-                </div>
-
                 <form id="guestbookForm">
                     <div class="mb-3">
                       <label for="inputHilsen" class="form-label">Skriv din hilsen under</label>
-                      <textarea class="form-control" aria-label="With textarea" rows="7" id="inputHilsen" disabled></textarea>
+                      <textarea class="form-control" aria-label="With textarea" rows="7" id="inputHilsen"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary" disabled>Send</button>
+                    <button type="submit" class="btn btn-primary">Send</button>
                 </form>
-                <div id="guestbookSendStatus"></div>
+                <div id="guestbookSendStatus" class="text-center"></div>
             </div>
 
             <hr class="my-5">

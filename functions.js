@@ -228,8 +228,9 @@ document.querySelector("#manuallyLoadGuestbookEntries").addEventListener('click'
 
 document.getElementById('galleryUploadForm').addEventListener('submit', async function (e) {
     e.preventDefault();
+    console.log("Submitting gallery POST...");
 
-    const messageDiv = document.getElementById('galleryUploadMessage');
+    const messageDiv = document.getElementById('galleryUploadStatus');
     const fileInput = document.getElementById('inputFile');
 
     const files = fileInput.files;
@@ -247,9 +248,12 @@ document.getElementById('galleryUploadForm').addEventListener('submit', async fu
     }
 
     try {
-        const response = await fetch('http://localhost:3000/upload', {
+        const response = await fetch('https://teknix.no/chakims/gallery', {
             method: 'POST',
             body: formData,
+            headers: {
+                'Authorization': 'chakims6969'
+            }
         });
 
         const result = await response.json();
@@ -261,14 +265,31 @@ document.getElementById('galleryUploadForm').addEventListener('submit', async fu
     }
 });
 
-document.getElementById('guestbookForm').addEventListener('submit', function (e) {
+document.getElementById('guestbookForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
+    const messageDiv = document.getElementById('guestbookSendStatus');
+    const formData = new FormData();
     const greeting = document.getElementById('inputHilsen').value;
-    const messageDiv = document.getElementById('guestbookMessage');
+    formData.append('greeting', greeting);
 
     if (greeting) {
-        messageDiv.innerHTML = `<p>Tusen takk, din melding vil straks dukke opp i gjesteboken :)</p>`;
+        try {
+            const response = await fetch('https://teknix.no/chakims/greeting', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': 'chakims6969'
+                }
+            });
+    
+            const result = await response.json();
+            messageDiv.innerHTML = result.message;
+        } catch (error) {
+            console.error('Error uploading files:', error);
+            messageDiv.innerHTML = 'En feil har oppstått, klarte ikke å laste opp din hilsen... vennligst prøv igjen senere.';
+        }
+        // messageDiv.innerHTML = `<p>Tusen takk, din melding vil straks dukke opp i gjesteboken :)</p>`;
     } else {
         messageDiv.innerHTML = `<p>Beklager, det ser ut som at meldingen din er tom... vennligst prøv igjen.</p>`;
     }
