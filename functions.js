@@ -148,63 +148,8 @@ async function populateGallery() {
 }
 
 
-/** Populate the gallery with all uploaded images */
-
-function populateGallery2() {
-
-    try {
-
-        const el = document.querySelector('#galleryimages');
-
-        el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
-
-        const images = [
-            "resources/20240804_155628.jpg",
-            "resources/20240807_122934.jpg",
-            "resources/20241015_130714.jpg",
-            "resources/20241016_154143.jpg",
-            "resources/20241016_154556.jpg",
-            "resources/for_evigt.jpg",
-            "resources/Screenshot_20250301_224253_Photos.jpg",
-            "resources/Screenshot_20250301_224312_Photos.jpg",
-            "resources/Snapchat-686363600.jpg",
-            "resources/Snapchat-776564614~2.jpg",
-            "resources/Snapchat-1069945376.jpg",
-            "resources/Snapchat-1183172171.jpg",
-            "resources/Snapchat-1208917324.jpg",
-            "resources/Snapchat-1479250926.jpg",
-            "resources/Snapchat-1496764530.jpg",
-            "resources/Snapchat-1655512974.jpg",
-            "resources/Snapchat-1661067433.jpg"
-        ];
-
-        setTimeout(() => {
-
-            let html = "";
-            html += `<div class="row g-0">`;
-            images.forEach((img) => {
-                html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${img}');" onclick="window.open('${img}', '_blank');"></div>`;
-            });
-            html += `</div`;
-
-            el.innerHTML = html;
-
-        }, 250);
-
-    } catch (error) {
-
-        console.log("en feil oppstod, kunne ikke legge til bilder i galleri...");
-        document.getElementById('galleryimages').innerHTML = `<div class="alert alert-danger my-3" role="alert">
-            Beklager, men en feil har oppstått! :(<br>
-            Klarte ikke hente bildene...<br><br>
-            Feilmelding: ${JSON.stringify(error)}
-        </div>`;
-
-    }
-}
 
 /** Populate the guestbook with all greetings */
-
 async function populateGuestbook() {
 
 
@@ -241,6 +186,7 @@ async function populateGuestbook() {
                     <div class="card-body">
                         <p class="card-text">${entry.greeting}</p>
                         <p class="card-text text-end"><small class="text-muted">${new Date(entry.id).toLocaleString()}</small></p>
+                        ${isAdmin() ? `<button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" onclick="deleteGreeting('${entry.id}')">&cross;</button>` : ''}
                     </div>
                 </div>
             </div>`;
@@ -366,3 +312,41 @@ document.getElementById('guestbookForm').addEventListener('submit', async functi
         emptyUploadStatusDivs();
     }
 });
+
+
+
+
+
+/** DELETE STUFF */
+function deleteGreeting(id) {
+    if (confirm("Er du sikker på at du vil slette denne hilsenen?")) {
+        try {
+            fetch(`https://teknix.no/chakims/greeting/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'chakims6969'
+                },
+                mode: 'cors'
+            }).then(() => {
+                populateGuestbook();
+            });
+        } catch (error) {
+            console.error("Error deleting greeting:", error);
+        }
+    }
+}
+
+
+/** Admin stuff */
+function authenticateAdmin() {
+    const prompt = "Skriv inn passordet for å få tilgang til admin-funksjonalitet:";
+    const password = window.prompt(prompt);
+    if (password === 'chakims6969') {
+        localStorage.setItem("admin", "true");
+    } else {
+        localStorage.removeItem("admin");
+    }
+}
+function isAdmin() {
+    return localStorage.getItem("admin") === "true";
+}
