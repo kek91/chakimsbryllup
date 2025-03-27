@@ -366,6 +366,7 @@ function authenticateAdmin() {
     const password = window.prompt(prompt);
     if (password === 'chakims6969') {
         localStorage.setItem("admin", "true");
+        location.reload();
     } else {
         localStorage.removeItem("admin");
     }
