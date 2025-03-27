@@ -131,7 +131,9 @@ async function populateGallery() {
         let html = '<div class="row g-0">';
         images.forEach((img) => {
             const imgsrc = `https://teknix.no/chakims${img}`;
-            html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${imgsrc}');" onclick="window.open('${imgsrc}', '_blank');"></div>`;
+            html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${imgsrc}');" onclick="window.open('${imgsrc}', '_blank');">
+            ${isAdmin() ? `<button class="btn btn-danger btn-sm" onclick="deleteImage('${img}')">&cross;</button>` : ''}
+            </div>`;
         });
         html += '</div><small>Antall bilder: ' + images.length + '</small>';
 
@@ -331,9 +333,30 @@ function deleteGreeting(id) {
                 populateGuestbook();
             });
         } catch (error) {
-            console.error("Error deleting greeting:", error);
+            console.error("Error deleting greeting: ", error);
         }
     }
+}
+
+/** DELETE IMAGE */
+function deleteImage(filename) {
+    if (confirm("Er du sikker på at du vil slette dette bildet? Kan ikke angres!")) {
+        try {
+            const file = filename.split("/").pop();
+            fetch(`https://teknix.no/chakims/gallery/${file}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'chakims6969'
+                },
+                mode: 'cors'
+            }).then(() => {
+                populateGallery();
+            });
+        } catch (error) {
+            console.error("Error deleting image: ", error);
+        }
+    }
+    return;
 }
 
 
