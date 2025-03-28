@@ -194,7 +194,7 @@ function openModal(startIndex) {
 
         let mediaElement = isVideo
             ? `<video src="${imgsrc}" controls autoplay class="d-block w-100"></video>`
-            : `<img src="${imgsrc}" class="d-block w-100" alt="Image">`;
+            : `<img src="${imgsrc}" class="d-block w-100" alt="Image" loading="lazy">`;
 
         carouselInner.innerHTML += `
             <div class="carousel-item ${index === startIndex ? "active" : ""}">
