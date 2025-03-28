@@ -127,15 +127,48 @@ async function populateGallery() {
 
         const data = await response.json();
         const images = data || [];
+        // cache the array to localStorage because it's used later
+        // when opening the modal carousel
+        localStorage.setItem("imagesForCarousel", JSON.stringify(images));
 
-        let html = '<div class="row g-0">';
+        /*
+        let html = `<div id="imageCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">`;
+        let i=0;
         images.forEach((img) => {
             const imgsrc = `https://teknix.no/chakims${img}`;
-            html += `<div class="col-6 col-md-4 galleryimage" style="background-image:url('${imgsrc}');" onclick="window.open('${imgsrc}', '_blank');">
+            const isVideo = imgsrc.endsWith(".mp4");
+            const isActive = i === 0;
+            i++;
+
+            html += `
+            <div class="carousel-item ${isActive ? 'active' : ''}" style="background-image: url('${isVideo ? 'resources/video.webp' : imgsrc}');"></div>
             ${isAdmin() ? `<button class="btn btn-danger btn-sm" onclick="deleteImage('${img}')">&cross;</button>` : ''}
-            </div>`;
+            `;
         });
-        html += '</div><small>Antall bilder: ' + images.length + '</small>';
+        html += `<!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>`;
+        */
+
+        let html = '<div class="row g-0">';
+        images.forEach((img, index) => {
+            const imgsrc = `https://teknix.no/chakims${img}`;
+            const isVideo = imgsrc.endsWith(".mp4");
+            html += `<div class="col-4 col-sm-3 col-md-2 galleryimage" 
+                    style="background-image:url('${isVideo ? 'resources/video.webp' : imgsrc}');" 
+                    onclick="openModal(${index});"
+                >
+                ${isAdmin() ? `<button class="btn btn-danger btn-sm" onclick="deleteImage('${img}')">&cross;</button>` : ''}
+            </div>`;
+            //onclick="window.open('${imgsrc}', '_blank');">
+        });
+        html += '</div><small class="mt-2">Antall bilder: ' + images.length + '</small>';
 
         el.innerHTML = html;
     } catch (error) {
@@ -148,6 +181,52 @@ async function populateGallery() {
             </div>`;
     }
 }
+
+function openModal(startIndex) {
+    let carouselInner = document.querySelector("#carouselModal .carousel-inner");
+    carouselInner.innerHTML = ""; // Clear previous items
+    
+    const images = JSON.parse(localStorage.getItem("imagesForCarousel")) || [];
+
+    images.forEach((img, index) => {
+        const imgsrc = `https://teknix.no/chakims${img}`;
+        const isVideo = imgsrc.endsWith(".mp4");
+
+        let mediaElement = isVideo
+            ? `<video src="${imgsrc}" controls autoplay class="d-block w-100"></video>`
+            : `<img src="${imgsrc}" class="d-block w-100" alt="Image">`;
+
+        carouselInner.innerHTML += `
+            <div class="carousel-item ${index === startIndex ? "active" : ""}">
+                ${mediaElement}
+            </div>`;
+    });
+
+    let modal = new bootstrap.Modal(document.getElementById("imageModal"));
+    modal.show();
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") {
+            document.querySelector("#carouselModal .carousel-control-next")?.click();
+        } else if (e.key === "ArrowLeft") {
+            document.querySelector("#carouselModal .carousel-control-prev")?.click();
+        }
+    });
+
+
+    // Pause inactive videos and play only the active one
+    document.querySelector("#carouselModal").addEventListener("slid.bs.carousel", function () {
+        document.querySelectorAll(".carousel-item video").forEach((video) => {
+            video.pause();
+        });
+
+        let activeVideo = document.querySelector(".carousel-item.active video");
+        if (activeVideo) {
+            activeVideo.play();
+        }
+    });
+}
+
 
 
 
