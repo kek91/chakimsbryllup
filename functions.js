@@ -529,3 +529,35 @@ async function sendVisitorStats() {
         console.error("Error sending visitor stats:", error);
     }
 }
+
+
+
+/** Confetti function and event handler */
+
+function launchConfetti() {
+    console.log("Launching confettis!! :D");
+    const numConfetti = 50; // Adjust for more/less confetti
+    const colors = ["red", "blue", "yellow", "green", "purple", "orange"];
+    
+    for (let i = 0; i < numConfetti; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.setProperty("--confetti-color", colors[Math.floor(Math.random() * colors.length)]);
+        confetti.style.setProperty("--confetti-x", `${(Math.random() - 0.5) * 200}px`);
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.animationDuration = `${Math.random() * 2 + 2}s`; // Random speed
+        
+        document.body.appendChild(confetti);
+        
+        // Remove confetti after animation
+        setTimeout(() => confetti.remove(), 3000);
+    }
+}
+
+// Example: Run confetti when clicking a button
+setTimeout(() => {
+    console.log("Enabling confetti!");
+    document.querySelectorAll(".confetti-button").forEach((el) => {
+        el.addEventListener("click", launchConfetti);
+    });
+},100);

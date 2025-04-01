@@ -236,3 +236,26 @@ a {
 a:hover, a:focus, a:active {
     color:#906E3E;
 }
+
+
+
+/** Confetti */
+.confetti {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: var(--confetti-color, red);
+    opacity: 0.8;
+    border-radius: 50%;
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    0% {
+        transform: translateY(0) translateX(0);
+    }
+    100% {
+        transform: translateY(100vh) translateX(var(--confetti-x, 0px));
+    }
+}
