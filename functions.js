@@ -21,11 +21,21 @@ function navigateToPage(page) {
                 console.log(`Switching page to ${page}`);
                 window.scrollTo(0, 0);
                 if (!firstTimeLoad) {
-                    document.querySelector(".navbar-toggler").click();
-                    console.log("firstTimeLoad is false, toggle menu");
+                    //document.querySelector(".navbar-toggler").click();
+
+                    const navbarToggler = document.querySelector(".navbar-toggler");
+                    const navbarMenu = document.querySelector(".navbar-collapse");
+
+                    // Check if the menu is open before trying to close it
+                    if (navbarMenu.classList.contains("show")) {
+                        navbarToggler.click();
+                        console.log("Nav menu was open, closing it.");
+                    }
+
+                    //console.log("firstTimeLoad is false, toggle menu");
                 } else {
                     firstTimeLoad = false;
-                    console.log("firstTimeLoad was true, do not toggle menu");
+                    //console.log("firstTimeLoad was true, do not toggle menu");
                 }
             } catch (e) {
                 // eat exception
