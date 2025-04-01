@@ -38,6 +38,8 @@ function navigateToPage(page) {
             }
         }
     }
+
+    // sendVisitorStats();
 }
 
 function setPageFromUrl() {
@@ -446,4 +448,53 @@ async function authenticateAdmin() {
 }
 function isAdmin() {
     return localStorage.getItem("admin") === "true";
+}
+
+
+
+
+
+
+/** Visitor stats */
+
+async function sendVisitorStats() {
+    try {
+        // Get user agent details
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const language = navigator.language;
+
+        // Get screen size
+        const screenWidth = screen.width;
+        const screenHeight = screen.height;
+
+        // Get IP & Location (using an external API)
+        const ipData = await fetch("https://ipapi.co/json/").then(res => res.json());
+
+        const userdata = {
+            ip: ipData.ip,
+            city: ipData.city,
+            region: ipData.region,
+            country: ipData.country_name,
+            browser: userAgent,
+            device: platform,
+            language,
+            screenSize: `${screenWidth}x${screenHeight}`,
+            page: window.location.href
+        };
+
+        // Send to backend
+        // await fetch("https://teknix.no/chakims/stats", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "Authorization": "chakims6969"
+        //     },
+        //     body: JSON.stringify({ userdata })
+        // });
+
+        console.log("Visitor stats sent:", userdata);
+    } catch (error) {
+        console.error("Error sending visitor stats:", error);
+    }
 }
