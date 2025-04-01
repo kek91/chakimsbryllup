@@ -141,7 +141,7 @@ async function populateGallery() {
                     style="background-image:url('${isVideo ? 'resources/video.webp' : imgsrc}');" 
                     onclick="openModal(${index});"
                 >
-                ${isAdmin() ? `<button class="btn btn-danger btn-sm" onclick="deleteImage('${img}')">&cross;</button>` : ''}
+                ${isAdmin() ? `<button class="btn btn-dark btn-sm" onclick="deleteImage('${img}')">&cross;</button>` : ''}
             </div>`;
             //onclick="window.open('${imgsrc}', '_blank');">
         });
@@ -241,8 +241,11 @@ async function populateGuestbook() {
                 <div class="card bg-warning-subtle">
                     <div class="card-body">
                         <p class="card-text">${entry.greeting}</p>
-                        <p class="card-text text-end"><small class="text-muted">${new Date(entry.id).toLocaleString()}</small></p>
-                        ${isAdmin() ? `<button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" onclick="deleteGreeting('${entry.id}')">&cross;</button>` : ''}
+                        <p class="card-text float-start">
+                            <button class="btn btn-danger btn-sm m-0" onclick="likeGreeting('${entry.id}')">&hearts; ${entry.likes || ''}</button>
+                        </p>
+                        <p class="card-text text-end float-end"><small class="text-muted">${new Date(entry.id).toLocaleString()}</small></p>
+                        ${isAdmin() ? `<button class="btn btn-dark btn-sm position-absolute top-0 end-0 m-0" onclick="deleteGreeting('${entry.id}')">&cross;</button>` : ''}
                     </div>
                 </div>
             </div>`;
@@ -389,6 +392,24 @@ function deleteGreeting(id) {
         } catch (error) {
             console.error("Error deleting greeting: ", error);
         }
+    }
+}
+
+/** LIKE GREETING */
+function likeGreeting(id) {
+    
+    try {
+        fetch(`https://teknix.no/chakims/greeting/${id}/like`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'chakims6969'
+            },
+            mode: 'cors'
+        }).then(() => {
+            populateGuestbook();
+        });
+    } catch (error) {
+        console.error("Error deleting greeting: ", error);
     }
 }
 
