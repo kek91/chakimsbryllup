@@ -131,31 +131,6 @@ async function populateGallery() {
         // when opening the modal carousel
         localStorage.setItem("imagesForCarousel", JSON.stringify(images));
 
-        /*
-        let html = `<div id="imageCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-        <div class="carousel-inner">`;
-        let i=0;
-        images.forEach((img) => {
-            const imgsrc = `https://teknix.no/chakims${img}`;
-            const isVideo = imgsrc.endsWith(".mp4");
-            const isActive = i === 0;
-            i++;
-
-            html += `
-            <div class="carousel-item ${isActive ? 'active' : ''}" style="background-image: url('${isVideo ? 'resources/video.webp' : imgsrc}');"></div>
-            ${isAdmin() ? `<button class="btn btn-danger btn-sm" onclick="deleteImage('${img}')">&cross;</button>` : ''}
-            `;
-        });
-        html += `<!-- Controls -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-        </div>`;
-        */
-
         let html = '<div class="row g-0">';
         images.forEach((img, index) => {
             const imgsrc = `https://teknix.no/chakims${img}`;
@@ -182,22 +157,24 @@ async function populateGallery() {
     }
 }
 
+
 function openModal(startIndex) {
-    let carouselInner = document.querySelector("#carouselModal .carousel-inner");
+    const carouselInner = document.querySelector("#carouselModal .carousel-inner");
     carouselInner.innerHTML = ""; // Clear previous items
-    
+
     const images = JSON.parse(localStorage.getItem("imagesForCarousel")) || [];
+    if (images.length === 0) return;
 
     images.forEach((img, index) => {
         const imgsrc = `https://teknix.no/chakims${img}`;
         const isVideo = imgsrc.endsWith(".mp4");
 
         let mediaElement = isVideo
-            ? `<video src="${imgsrc}" controls autoplay class="d-block w-100"></video>`
+            ? `<video src="${imgsrc}" controls class="d-block w-100"></video>`
             : `<img src="${imgsrc}" class="d-block w-100" alt="Image" loading="lazy">`;
 
         carouselInner.innerHTML += `
-            <div class="carousel-item ${index === startIndex ? "active" : ""}">
+            <div class="carousel-item ${index === startIndex ? "active" : ""}" data-index="${index}">
                 ${mediaElement}
             </div>`;
     });
@@ -205,17 +182,9 @@ function openModal(startIndex) {
     let modal = new bootstrap.Modal(document.getElementById("imageModal"));
     modal.show();
 
-    document.addEventListener("keydown", function (e) {
-        if (e.key === "ArrowRight") {
-            document.querySelector("#carouselModal .carousel-control-next")?.click();
-        } else if (e.key === "ArrowLeft") {
-            document.querySelector("#carouselModal .carousel-control-prev")?.click();
-        }
-    });
+    const carouselElement = document.querySelector("#carouselModal");
 
-
-    // Pause inactive videos and play only the active one
-    document.querySelector("#carouselModal").addEventListener("slid.bs.carousel", function () {
+    carouselElement.addEventListener("slid.bs.carousel", function () {
         document.querySelectorAll(".carousel-item video").forEach((video) => {
             video.pause();
         });
@@ -226,6 +195,10 @@ function openModal(startIndex) {
         }
     });
 }
+
+
+
+
 
 
 
@@ -440,13 +413,34 @@ function deleteImage(filename) {
 
 
 /** Admin stuff */
-function authenticateAdmin() {
+async function authenticateAdmin() {
     const prompt = "Skriv inn passordet for å få tilgang til admin-funksjonalitet:";
     const password = window.prompt(prompt);
-    if (password === 'chakims6969') {
-        localStorage.setItem("admin", "true");
-        location.reload();
-    } else {
+
+    try {
+        const response = await fetch(`https://teknix.no/chakims/admin`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'chakims6969',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password: password }),
+            mode: 'cors'
+        });
+        
+        const result = await response.json();
+
+        if (result.hasOwnProperty('error')) {
+            console.error("Error authenticating as admin: ", result.error);
+            localStorage.removeItem("admin");
+            return;
+        }
+        if (result.hasOwnProperty('status') && result.status === "OK") {
+            localStorage.setItem("admin", "true");
+            location.reload();
+        }
+    } catch (error) {
+        console.error("Error authenticating as admin: ", error);
         localStorage.removeItem("admin");
     }
 }
