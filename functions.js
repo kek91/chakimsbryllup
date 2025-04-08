@@ -550,7 +550,9 @@ function launchConfetti() {
         document.body.appendChild(confetti);
         
         // Remove confetti after animation
-        setTimeout(() => confetti.remove(), 3000);
+        //setTimeout(() => confetti.remove(), 3000);
+        setTimeout(() => confetti.remove(), (parseFloat(confetti.style.animationDuration) * 1000) + 500);
+
     }
 }
 
