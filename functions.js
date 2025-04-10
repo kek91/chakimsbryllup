@@ -167,6 +167,13 @@ async function populateGallery() {
                 Feilmelding: ${error.message}
             </div>`;
     }
+
+    // TODO: temporary default to 2nd tab (diverse)
+    try {
+        document.querySelector('#galleryTabs li:nth-child(2) button').click();
+    } catch (e) {
+        console.error("Could not switch gallery tab to Diverse: ", e);
+    }
 }
 
 
