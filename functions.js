@@ -356,6 +356,51 @@ document.getElementById('galleryUploadForm').addEventListener('submit', async fu
     }
 });
 
+document.getElementById('galleryUploadFormWedding').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    console.log("Submitting wedding gallery POST...");
+
+    const messageDiv = document.getElementById('galleryUploadStatusWedding');
+    const fileInput = document.getElementById('inputFileWedding');
+
+    const files = fileInput.files;
+
+    if (files.length === 0) {
+        messageDiv.innerHTML = '<div class="alert alert-warning">Ingen filer valgt!</div>';
+        return;
+    }
+
+    messageDiv.innerHTML = `<div class="alert alert-info">Laster opp bilder, vennligst vent...</div>`;
+
+    const formData = new FormData();
+
+    // Append multiple files
+    for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i]); // 'files' should match the backend field name
+    }
+
+    try {
+        const response = await fetch('https://teknix.no/chakims/gallerywedding', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': 'chakims6969'
+            },
+            mode: 'cors'
+        });
+
+        const result = await response.json();
+        messageDiv.innerHTML = `<div class="alert alert-success">Vellykket &check;</div>`;
+        populateGallery();
+        emptyUploadStatusDivs();
+        console.log('Uploaded Files! ', result);
+    } catch (error) {
+        console.error('Error uploading files:', error);
+        messageDiv.innerHTML = `<div class="alert alert-danger">En feil oppstod, kunne ikke laste opp bilde &cross;</div>`;
+        emptyUploadStatusDivs();
+    }
+});
+
 document.getElementById('guestbookForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
