@@ -348,7 +348,7 @@ document.getElementById('galleryUploadForm').addEventListener('submit', async fu
         messageDiv.innerHTML = `<div class="alert alert-success">Vellykket &check;</div>`;
         populateGallery();
         emptyUploadStatusDivs();
-        console.log('Uploaded Files:', result.files);
+        console.log('Uploaded Files! ', result);
     } catch (error) {
         console.error('Error uploading files:', error);
         messageDiv.innerHTML = `<div class="alert alert-danger">En feil oppstod, kunne ikke laste opp bilde &cross;</div>`;
@@ -442,7 +442,7 @@ function deleteImage(filename) {
                 },
                 mode: 'cors'
             }).then(() => {
-                populateGallery();
+                location.reload();
             });
         } catch (error) {
             console.error("Error deleting image: ", error);
