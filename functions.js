@@ -58,6 +58,7 @@ function setPageFromUrl() {
         navigateToPage("forsiden");
     } else if (url.includes("praktisk-info")) {
         navigateToPage("praktisk-info");
+        populateGuestlist();
     } else if (url.includes("program")) {
         navigateToPage("program");
     } else if (url.includes("kart")) {
@@ -279,6 +280,64 @@ async function populateGuestbook() {
             Feilmelding: ${error.message}
         </div>`;
     }
+}
+
+
+
+
+/** Populate the guest list */
+function populateGuestlist() {
+    const guestList = [
+        "Chanett",
+        "Kim Eirik",
+        "Vito - Kim og Chanetts sønn",
+        "Janne - Kims søster",
+        "Jan Erik - Jannes mann",
+        "Erik - Kims bror og forlover",
+        "Ingunn - Chanetts mamma",
+        "Kjell - Chanetts pappa",
+        "Susanne - Chanetts søster",
+        "Ayla - Susannes datter",
+        "Eirik - Susannes sønn",
+        "Silje - Eiriks samboer",
+        "Oda - Erik og Siljes datter",
+        "JoInge - Chanetts bror",
+        "Fred - Chanetts bror",
+        "Wenche - Freds kone",
+        "Live - Fred og Wenches datter",
+        "Tonje - Fred og Wenches datter",
+        "Kjetil - Chanetts bror",
+        "Anita - Kjetils kone",
+        "Lise - Chanetts søster",
+        "Per Anders - Lises mann",
+        "Mari - Lises datter",
+        "Amanda - Chanetts venn",
+        "Elin - Amandas kone",
+        "Marianne - Amandas mamma",
+        "Ville - Amanda/Elins sønn",
+        "Elise - Chanetts venn",
+        "Emelie - Elises samboer",
+        "Tom Erik - Chanetts bestevenn og forlover",
+        "Thomas - Tom Eriks kjæreste",
+        "Anker - Thomas' sønn",
+        "Petter - Thomas' sønn"
+    ];
+    const el = document.querySelector('#guestlist');
+    el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
+    setTimeout(() => {
+
+        if(isModerator()) {
+            let html = '<ul class="list-group">';
+            guestList.forEach(guest => {
+                html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);">${guest}</li>`;
+            });
+            html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);"><b>Totalt: ${guestList.length-2} personer inkl brudeparet (+ 2 babyer under to år)</b></li>`;
+            html += '</ul>';
+            el.innerHTML = html;
+        } else {
+            el.innerHTML = `<span onclick="authenticateModerator()" class="btn btn-primary btn-sm">Klikk for å laste</span>`;
+        }
+    }, 250);
 }
 
 
@@ -529,8 +588,18 @@ async function authenticateAdmin() {
         localStorage.removeItem("admin");
     }
 }
+function authenticateModerator() {
+    const prompt = window.prompt("Skriv inn moderator passord:");
+    if (prompt === "jøa25") {
+        localStorage.setItem("moderator", "true");
+        populateGuestlist();
+    }
+}
 function isAdmin() {
     return localStorage.getItem("admin") === "true";
+}
+function isModerator() {
+    return localStorage.getItem("moderator") === "true";
 }
 
 
