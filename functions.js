@@ -310,6 +310,8 @@ function populateGuestlist() {
         "Anita - Kjetils kone",
         "Lise - Chanetts søster",
         "Per Anders - Lises mann",
+        "Nina - Chanetts søster",
+        "Ingrid - Ninas datter",
         "Mari - Lises datter",
         "Amanda - Chanetts venn",
         "Elin - Amandas kone",
@@ -331,7 +333,7 @@ function populateGuestlist() {
             guestList.forEach(guest => {
                 html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);">${guest}</li>`;
             });
-            html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);"><b>Totalt: ${guestList.length-2} personer inkl brudeparet (+ 2 babyer under to år)</b></li>`;
+            html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);"><b>Totalt: ${guestList.length} personer inkl brudeparet og 2 babyer under to år</b></li>`;
             html += '</ul>';
             el.innerHTML = html;
         } else {
