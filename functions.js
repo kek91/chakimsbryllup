@@ -333,7 +333,7 @@ function populateGuestlist() {
             guestList.forEach(guest => {
                 html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);">${guest}</li>`;
             });
-            html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);"><b>Totalt: ${guestList.length} personer inkl brudeparet og 2 babyer under to år</b></li>`;
+            html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);"><b>Totalt: ${guestList.length-4} gjester (${guestList.length} totalt med brudepar og babyer)</b></li>`;
             html += '</ul>';
             el.innerHTML = html;
         } else {
