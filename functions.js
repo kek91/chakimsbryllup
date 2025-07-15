@@ -122,6 +122,56 @@ function shuffleArray(array) {
 
 /** Populate the gallery with all uploaded images */
 async function populateGallery() {
+
+    /* Gallery (wedding) */
+    try {
+        const el = document.querySelector('#galleryimagesWedding');
+
+        el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
+
+        const response = await fetch('https://teknix.no/chakims/gallerywedding', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'chakims6969'
+            },
+            mode: 'cors'
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const images = data || [];
+        // cache the array to localStorage because it's used later
+        // when opening the modal carousel
+        localStorage.setItem("imagesForCarouselWedding", JSON.stringify(images));
+
+        let html = '<div class="row g-0">';
+        images.forEach((img, index) => {
+            const imgsrc = `https://teknix.no/chakims${img}`;
+            const isVideo = imgsrc.endsWith(".mp4");
+            html += `<div class="col-4 col-sm-3 col-md-2 galleryimage" 
+                    style="background-image:url('${isVideo ? 'resources/gemini-video-thumbnail.png' : imgsrc}');" 
+                    onclick="openModal(${index}, 'wedding');"
+                >
+                ${isAdmin() ? `<button class="btn btn-dark btn-sm" onclick="deleteImage('${img}', 'wedding')">&cross;</button>` : ''}
+            </div>`;
+        });
+        html += '</div><small class="mt-2">Antall bilder: ' + images.length + '</small>';
+
+        el.innerHTML = html;
+    } catch (error) {
+        console.error("Feil ved henting av bilder:", error);
+        document.getElementById('galleryimagesWedding').innerHTML = `
+            <div class="alert alert-danger my-3" role="alert">
+                Beklager, men en feil har oppstått! :(<br>
+                Klarte ikke hente bildene...<br><br>
+                Feilmelding: ${error.message}
+            </div>`;
+    }
+
+
+    /* Gallery (misc) */
     try {
         const el = document.querySelector('#galleryimages');
 
@@ -149,7 +199,7 @@ async function populateGallery() {
             const imgsrc = `https://teknix.no/chakims${img}`;
             const isVideo = imgsrc.endsWith(".mp4");
             html += `<div class="col-4 col-sm-3 col-md-2 galleryimage" 
-                    style="background-image:url('${isVideo ? 'resources/video.webp' : imgsrc}');" 
+                    style="background-image:url('${isVideo ? 'resources/gemini-video-thumbnail.png' : imgsrc}');" 
                     onclick="openModal(${index});"
                 >
                 ${isAdmin() ? `<button class="btn btn-dark btn-sm" onclick="deleteImage('${img}')">&cross;</button>` : ''}
@@ -170,19 +220,21 @@ async function populateGallery() {
     }
 
     // TODO: temporary default to 2nd tab (diverse)
-    try {
-        document.querySelector('#galleryTabs li:nth-child(2) button').click();
-    } catch (e) {
-        console.error("Could not switch gallery tab to Diverse: ", e);
-    }
+    // try {
+    //     document.querySelector('#galleryTabs li:nth-child(2) button').click();
+    // } catch (e) {
+    //     console.error("Could not switch gallery tab to Diverse: ", e);
+    // }
 }
 
 
-function openModal(startIndex) {
-    const carouselInner = document.querySelector("#carouselModal .carousel-inner");
+function openModal(startIndex, gallery = "misc") {
+    const carouselSelector = gallery === "wedding" ? "#carouselModalWedding" : "#carouselModal";
+    const carouselInner = document.querySelector(`${carouselSelector} .carousel-inner`);
     carouselInner.innerHTML = ""; // Clear previous items
 
-    const images = JSON.parse(localStorage.getItem("imagesForCarousel")) || [];
+    const imagesKey = gallery === "wedding" ? "imagesForCarouselWedding" : "imagesForCarousel";
+    const images = JSON.parse(localStorage.getItem(imagesKey)) || [];
     if (images.length === 0) return;
 
     images.forEach((img, index) => {
@@ -199,10 +251,11 @@ function openModal(startIndex) {
             </div>`;
     });
 
-    let modal = new bootstrap.Modal(document.getElementById("imageModal"));
+    const modalSelector = gallery === "wedding" ? "imageModalWedding" : "imageModal";
+    let modal = new bootstrap.Modal(document.getElementById(modalSelector));
     modal.show();
 
-    const carouselElement = document.querySelector("#carouselModal");
+    const carouselElement = document.querySelector(carouselSelector);
 
     carouselElement.addEventListener("slid.bs.carousel", function () {
         document.querySelectorAll(".carousel-item video").forEach((video) => {
@@ -215,7 +268,6 @@ function openModal(startIndex) {
         }
     });
 }
-
 
 
 
@@ -537,11 +589,12 @@ function likeGreeting(id) {
 }
 
 /** DELETE IMAGE */
-function deleteImage(filename) {
+function deleteImage(filename, gallery = "misc") {
     if (confirm("Er du sikker på at du vil slette dette bildet? Kan ikke angres!")) {
         try {
             const file = filename.split("/").pop();
-            fetch(`https://teknix.no/chakims/gallery/${file}`, {
+            const endpoint = gallery === "wedding" ? 'gallerywedding' : 'gallery';
+            fetch(`https://teknix.no/chakims/${endpoint}/${file}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': 'chakims6969'
