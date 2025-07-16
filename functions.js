@@ -542,7 +542,7 @@ document.getElementById('guestbookForm').addEventListener('submit', async functi
             emptyUploadStatusDivs();
         }
     } else {
-        messageDiv.innerHTML = `<div class="alert alert-danger">Vennligst skriv en hilsen først :)</div>`;
+        messageDiv.innerHTML = `<div class="alert alert-danger">Vennligst skriv en hilsen først 😊</div>`;
         emptyUploadStatusDivs();
     }
 });
