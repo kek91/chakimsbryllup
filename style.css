@@ -115,6 +115,22 @@ img.heart:hover {
     height:300px;
     width:100%;
 }
+@media (max-width: 768px) {
+    .programinnlegg {
+        background:rgba(0,0,0,0.5);
+        width:100%;
+        /* width:70%; */
+    }
+    .programinnlegg-img {
+        display:none;
+        width:100%;
+    }
+    .programinnlegg-img img {
+        height:auto;
+        width:auto;
+        max-height:100px;
+    }
+}
 /* .programliste li:before {
     content: "\2665";
     color: #9c5597;
