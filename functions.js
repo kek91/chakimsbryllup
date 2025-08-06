@@ -342,17 +342,17 @@ function populateGuestlist() {
     const guestList = [
         "Chanett",
         "Kim Eirik",
-        "Vito - Kim og Chanetts sønn",
+        "Vito - Kim og Chanetts sønn [BARN]",
         "Janne - Kims søster",
         "Jan Erik - Jannes mann",
         "Erik - Kims bror og forlover",
         "Ingunn - Chanetts mamma",
         "Kjell - Chanetts pappa",
         "Susanne - Chanetts søster",
-        "Ayla - Susannes datter",
+        "Ayla - Susannes datter [BARN]",
         "Eirik - Susannes sønn",
         "Silje - Eiriks samboer",
-        "Oda - Erik og Siljes datter",
+        "Oda - Erik og Siljes datter [BABY]",
         "JoInge - Chanetts bror",
         "Fred - Chanetts bror",
         "Wenche - Freds kone",
@@ -360,21 +360,23 @@ function populateGuestlist() {
         "Tonje - Fred og Wenches datter",
         "Kjetil - Chanetts bror",
         "Anita - Kjetils kone",
+        "Julian - Kjetil/Anitas sønn",
         "Lise - Chanetts søster",
         "Per Anders - Lises mann",
         "Nina - Chanetts søster",
         "Ingrid - Ninas datter",
+        "Tone - Ingrids venninne",
         "Mari - Lises datter",
         "Amanda - Chanetts venn",
         "Elin - Amandas kone",
-        "Marianne - Amandas mamma",
-        "Ville - Amanda/Elins sønn",
+        "Maria - Elins mamma",
+        "Ville - Amanda/Elins sønn [BABY]",
         "Elise - Chanetts venn",
         "Emelie - Elises samboer",
         "Tom Erik - Chanetts bestevenn og forlover",
         "Thomas - Tom Eriks kjæreste",
-        "Anker - Thomas' sønn",
-        "Petter - Thomas' sønn"
+        "Anker - Thomas' sønn [BARN]",
+        "Petter - Thomas' sønn [BARN]"
     ];
     const el = document.querySelector('#guestlist');
     el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
@@ -385,7 +387,7 @@ function populateGuestlist() {
             guestList.forEach(guest => {
                 html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);">${guest}</li>`;
             });
-            html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);"><b>Totalt: ${guestList.length-4} gjester (${guestList.length} totalt med brudepar og babyer)</b></li>`;
+            html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);"><b>Totalt: ${guestList.length} stk. (${guestList.length-6} stk ekskl barn/baby under 18 år)</b></li>`;
             html += '</ul>';
             el.innerHTML = html;
         } else {
