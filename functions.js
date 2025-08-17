@@ -120,155 +120,197 @@ function shuffleArray(array) {
 }
 
 
-/** Populate the gallery with all uploaded images */
+/** Populate a gallery with images */
+
+// Keep per-carousel instance + listener so we can clean them up safely
+window.__carouselState = window.__carouselState || {};
+
+
 async function populateGallery() {
 
-    /* Gallery (wedding) */
-    try {
-        const el = document.querySelector('#galleryimagesWedding');
+    await populateOneGallery({
+      url: "https://teknix.no/chakims/gallerywedding",
+      elSelector: "#galleryimagesWedding",
+      storageKey: "imagesForCarouselWedding",
+      galleryName: "wedding"
+    });
+  
+    await populateOneGallery({
+      url: "https://teknix.no/chakims/gallery",
+      elSelector: "#galleryimages",
+      storageKey: "imagesForCarousel",
+      galleryName: "misc"
+    });
 
-        el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
+    console.log('Setting up event listeners for image galleries...');
 
-        const response = await fetch('https://teknix.no/chakims/gallerywedding', {
-            method: 'GET',
-            headers: {
-                'Authorization': 'chakims6969'
-            },
-            mode: 'cors'
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+    // Handle gallery clicks (open modal or delete image)
+    document.addEventListener("click", (e) => {
+        const galleryEl = e.target.closest(".galleryimage");
+        // if (!galleryEl) return;
+    
+        // Delete button clicked?
+        if (e.target.matches("[data-delete]")) {
+            e.stopPropagation(); // prevent opening modal
+            const img = e.target.getAttribute("data-delete");
+            const gallery = galleryEl.getAttribute("data-gallery");
+            deleteImage(img, gallery);
+            return;
         }
-
-        const data = await response.json();
-        const images = data || [];
-        // cache the array to localStorage because it's used later
-        // when opening the modal carousel
-        localStorage.setItem("imagesForCarouselWedding", JSON.stringify(images));
-
-        let html = '<div class="row g-0">';
-        images.forEach((img, index) => {
-            const imgsrc = `https://teknix.no/chakims${img}`;
-            const isVideo = imgsrc.endsWith(".mp4");
-            html += `<div class="col-4 col-sm-3 col-md-2 galleryimage" 
-                    style="background-image:url('${isVideo ? 'resources/gemini-video-thumbnail.png' : imgsrc}');" 
-                    onclick="openModal(${index}, 'wedding');"
-                >
-                ${isAdmin() ? `<button class="btn btn-dark btn-sm" onclick="deleteImage('${img}', 'wedding')">&cross;</button>` : ''}
-            </div>`;
-        });
-        html += '</div><small class="mt-2">Antall bilder: ' + images.length + '</small>';
-
-        el.innerHTML = html;
-    } catch (error) {
-        console.error("Feil ved henting av bilder:", error);
-        document.getElementById('galleryimagesWedding').innerHTML = `
-            <div class="alert alert-danger my-3" role="alert">
-                Beklager, men en feil har oppstått! :(<br>
-                Klarte ikke hente bildene...<br><br>
-                Feilmelding: ${error.message}
-            </div>`;
-    }
-
-
-    /* Gallery (misc) */
-    try {
-        const el = document.querySelector('#galleryimages');
-
-        el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
-
-        const response = await fetch('https://teknix.no/chakims/gallery', {
-            method: 'GET',
-            headers: {
-                'Authorization': 'chakims6969'
-            },
-            mode: 'cors'
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const images = data || [];
-        // cache the array to localStorage because it's used later
-        // when opening the modal carousel
-        localStorage.setItem("imagesForCarousel", JSON.stringify(images));
-
-        let html = '<div class="row g-0">';
-        images.forEach((img, index) => {
-            const imgsrc = `https://teknix.no/chakims${img}`;
-            const isVideo = imgsrc.endsWith(".mp4");
-            html += `<div class="col-4 col-sm-3 col-md-2 galleryimage" 
-                    style="background-image:url('${isVideo ? 'resources/gemini-video-thumbnail.png' : imgsrc}');" 
-                    onclick="openModal(${index});"
-                >
-                ${isAdmin() ? `<button class="btn btn-dark btn-sm" onclick="deleteImage('${img}')">&cross;</button>` : ''}
-            </div>`;
-            //onclick="window.open('${imgsrc}', '_blank');">
-        });
-        html += '</div><small class="mt-2">Antall bilder: ' + images.length + '</small>';
-
-        el.innerHTML = html;
-    } catch (error) {
-        console.error("Feil ved henting av bilder:", error);
-        document.getElementById('galleryimages').innerHTML = `
-            <div class="alert alert-danger my-3" role="alert">
-                Beklager, men en feil har oppstått! :(<br>
-                Klarte ikke hente bildene...<br><br>
-                Feilmelding: ${error.message}
-            </div>`;
-    }
-
-    // TODO: temporary default to 2nd tab (diverse)
-    // try {
-    //     document.querySelector('#galleryTabs li:nth-child(2) button').click();
-    // } catch (e) {
-    //     console.error("Could not switch gallery tab to Diverse: ", e);
-    // }
+    
+        // Open modal
+        const index = parseInt(galleryEl.getAttribute("data-index"), 10);
+        const gallery = galleryEl.getAttribute("data-gallery");
+        openModal(index, gallery);
+    });
 }
+
+async function populateOneGallery({ url, elSelector, storageKey, galleryName }) {
+    console.log(`Populating gallery: ${galleryName} from ${url}`);
+    const el = document.querySelector(elSelector);
+    el.innerHTML = `<div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Laster...</span>
+        </div>
+      </div>`;
+  
+    try {
+      const response = await fetch(url, {
+        headers: { Authorization: "chakims6969" },
+        mode: "cors"
+      });
+  
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+  
+      const images = await response.json();
+      localStorage.setItem(storageKey, JSON.stringify(images));
+  
+      let html = '<div class="row g-0">';
+      images.forEach((img, index) => {
+        const imgsrc = `https://teknix.no/chakims${img}`;
+        const isVideo = imgsrc.endsWith(".mp4");
+        html += `
+          <div class="col-4 col-sm-3 col-md-2 galleryimage"
+               style="background-image:url('${isVideo ? "resources/gemini-video-thumbnail.png" : imgsrc}');"
+               data-index="${index}" data-gallery="${galleryName}">
+            ${isAdmin() ? `<button class="btn btn-dark btn-sm" data-delete="${img}">&cross;</button>` : ""}
+          </div>`;
+      });
+      html += `</div><small class="mt-2">Antall bilder: ${images.length}</small>`;
+  
+      el.innerHTML = html;
+    } catch (err) {
+      console.error("Feil ved henting av bilder:", err);
+      el.innerHTML = `
+        <div class="alert alert-danger my-3" role="alert">
+          Beklager, men en feil har oppstått! :(<br>
+          Klarte ikke hente bildene...<br><br>
+          Feilmelding: ${err.message}
+        </div>`;
+    }
+}
+  
 
 
 function openModal(startIndex, gallery = "misc") {
-    const carouselSelector = gallery === "wedding" ? "#carouselModalWedding" : "#carouselModal";
-    const carouselInner = document.querySelector(`${carouselSelector} .carousel-inner`);
-    carouselInner.innerHTML = ""; // Clear previous items
-
+    const carouselId = gallery === "wedding" ? "carouselModalWedding" : "carouselModal";
+    const modalId    = gallery === "wedding" ? "imageModalWedding"   : "imageModal";
+  
+    const carouselEl   = document.getElementById(carouselId);
+    const carouselInner = carouselEl.querySelector(".carousel-inner");
+    const modalEl      = document.getElementById(modalId);
+  
     const imagesKey = gallery === "wedding" ? "imagesForCarouselWedding" : "imagesForCarousel";
     const images = JSON.parse(localStorage.getItem(imagesKey)) || [];
-    if (images.length === 0) return;
-
-    images.forEach((img, index) => {
-        const imgsrc = `https://teknix.no/chakims${img}`;
-        const isVideo = imgsrc.endsWith(".mp4");
-
-        let mediaElement = isVideo
-            ? `<video src="${imgsrc}" controls class="d-block w-100"></video>`
-            : `<img src="${imgsrc}" class="d-block w-100" alt="Image" loading="lazy">`;
-
-        carouselInner.innerHTML += `
-            <div class="carousel-item ${index === startIndex ? "active" : ""}" data-index="${index}">
-                ${mediaElement}
-            </div>`;
-    });
-
-    const modalSelector = gallery === "wedding" ? "imageModalWedding" : "imageModal";
-    let modal = new bootstrap.Modal(document.getElementById(modalSelector));
+    if (!images.length) return;
+  
+    // --- clean up any previous instance/listener on this carousel ---
+    const prevState = window.__carouselState[carouselId];
+    if (prevState) {
+      try { carouselEl.removeEventListener("slid.bs.carousel", prevState.handler); } catch (_) {}
+      try { prevState.instance.dispose(); } catch (_) {}
+      window.__carouselState[carouselId] = null;
+    }
+  
+    // modular index helper (supports wrap-around)
+    const mod = (i) => (i + images.length) % images.length;
+  
+    // create one slide element
+    const createItem = (index, active = false) => {
+      const imgsrc = `https://teknix.no/chakims${images[mod(index)]}`;
+      const isVideo = imgsrc.endsWith(".mp4");
+  
+      const item = document.createElement("div");
+      item.className = `carousel-item${active ? " active" : ""}`;
+      item.dataset.index = String(mod(index));
+  
+      if (isVideo) {
+        const v = document.createElement("video");
+        v.className = "d-block w-100";
+        v.controls = true;
+        v.preload = "metadata";
+        v.src = imgsrc;
+        item.appendChild(v);
+      } else {
+        const img = document.createElement("img");
+        img.className = "d-block w-100";
+        img.loading = "lazy";
+        img.alt = "Image";
+        img.src = imgsrc;
+        item.appendChild(img);
+      }
+      return item;
+    };
+  
+    // initial 3 slides: prev / current / next
+    const prevIdx = mod(startIndex - 1);
+    const currIdx = mod(startIndex);
+    const nextIdx = mod(startIndex + 1);
+  
+    carouselInner.textContent = "";
+    carouselInner.appendChild(createItem(prevIdx, false));
+    carouselInner.appendChild(createItem(currIdx,  true));
+    carouselInner.appendChild(createItem(nextIdx, false));
+  
+    // show modal
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.show();
-
-    const carouselElement = document.querySelector(carouselSelector);
-
-    carouselElement.addEventListener("slid.bs.carousel", function () {
-        document.querySelectorAll(".carousel-item video").forEach((video) => {
-            video.pause();
-        });
-
-        let activeVideo = document.querySelector(".carousel-item.active video");
-        if (activeVideo) {
-            activeVideo.play();
-        }
+  
+    // init carousel (wrap enabled so arrows always work)
+    const instance = bootstrap.Carousel.getOrCreateInstance(carouselEl, {
+      interval: false,
+      ride: false,
+      wrap: true
     });
-}
-
+  
+    // after each slide completes, rebuild neighbors around the new active index
+    const handler = () => {
+      // pause any playing videos
+      carouselInner.querySelectorAll("video").forEach(v => v.pause());
+  
+      const active = carouselInner.querySelector(".carousel-item.active");
+      const currentIndex = Number(active?.dataset.index ?? 0);
+  
+      const newPrev = mod(currentIndex - 1);
+      const newNext = mod(currentIndex + 1);
+  
+      // rebuild the 3 items
+      carouselInner.textContent = "";
+      carouselInner.appendChild(createItem(newPrev, false));
+      carouselInner.appendChild(createItem(currentIndex, true));
+      carouselInner.appendChild(createItem(newNext, false));
+  
+      // auto-play active video (optional)
+      const activeVideo = carouselInner.querySelector(".carousel-item.active video");
+      if (activeVideo) activeVideo.play();
+    };
+  
+    carouselEl.addEventListener("slid.bs.carousel", handler);
+  
+    // save state so we can clean up next time
+    window.__carouselState[carouselId] = { instance, handler };
+  }
+  
 
 
 
