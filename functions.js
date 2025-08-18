@@ -492,6 +492,11 @@ document.querySelector("#manuallyLoadGallery").addEventListener('click', (e) => 
     populateGallery();
 });
 
+document.querySelector("#manuallyLoadGalleryWedding").addEventListener('click', (e) => {
+    e.preventDefault();
+    populateGallery();
+});
+
 document.querySelector("#manuallyLoadGuestbookEntries").addEventListener('click', (e) => {
     e.preventDefault();
     populateGuestbook();
@@ -499,13 +504,11 @@ document.querySelector("#manuallyLoadGuestbookEntries").addEventListener('click'
 
 /** Event listener for forms */
 
-document.getElementById('galleryUploadForm').addEventListener('submit', async function (e) {
+document.getElementById('galleryUploadForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    console.log("Submitting gallery POST...");
 
     const messageDiv = document.getElementById('galleryUploadStatus');
     const fileInput = document.getElementById('inputFile');
-
     const files = fileInput.files;
 
     if (files.length === 0) {
@@ -513,44 +516,111 @@ document.getElementById('galleryUploadForm').addEventListener('submit', async fu
         return;
     }
 
-    messageDiv.innerHTML = `<div class="alert alert-info">Laster opp bilder, vennligst vent...</div>`;
+    messageDiv.innerHTML = ''; // clear previous
 
-    const formData = new FormData();
-
-    // Append multiple files
+    // Create a progress div for each file
+    const progressBars = [];
     for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i]); // 'files' should match the backend field name
+        const file = files[i];
+        const progressWrapper = document.createElement('div');
+        progressWrapper.className = 'mb-2';
+        progressWrapper.innerHTML = `
+            <div class="progress">
+                <div style="width:30%;">${file.name}</div>
+                <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
+            </div>
+        `;
+        messageDiv.appendChild(progressWrapper);
+        progressBars.push(progressWrapper.querySelector('.progress-bar'));
     }
 
-    try {
-        const response = await fetch('https://teknix.no/chakims/gallery', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Authorization': 'chakims6969'
-            },
-            mode: 'cors'
+    // Upload each file individually to track progress
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append('files', file);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://teknix.no/chakims/gallery');
+
+        xhr.setRequestHeader('Authorization', 'chakims6969');
+
+        xhr.upload.addEventListener('progress', (event) => {
+            if (event.lengthComputable) {
+                const percent = Math.round((event.loaded / event.total) * 100);
+                progressBars[i].style.width = percent + '%';
+                progressBars[i].textContent = percent + '%';
+            }
         });
 
-        const result = await response.json();
-        messageDiv.innerHTML = `<div class="alert alert-success">Vellykket &check;</div>`;
-        populateGallery();
-        emptyUploadStatusDivs();
-        console.log('Uploaded Files! ', result);
-    } catch (error) {
-        console.error('Error uploading files:', error);
-        messageDiv.innerHTML = `<div class="alert alert-danger">En feil oppstod, kunne ikke laste opp bilde &cross;</div>`;
-        emptyUploadStatusDivs();
+        xhr.addEventListener('load', () => {
+            progressBars[i].style.width = '100%';
+            progressBars[i].textContent = '✅ Ferdig';
+            if (i === files.length - 1) {
+                populateGallery(); // reload gallery after last file
+            }
+        });
+
+        xhr.addEventListener('error', () => {
+            progressBars[i].classList.add('bg-danger');
+            progressBars[i].textContent = '❌ Feil';
+        });
+
+        xhr.send(formData);
     }
 });
 
-document.getElementById('galleryUploadFormWedding').addEventListener('submit', async function (e) {
+
+// document.getElementById('galleryUploadForm').addEventListener('submit', async function (e) {
+//     e.preventDefault();
+//     console.log("Submitting gallery POST...");
+
+//     const messageDiv = document.getElementById('galleryUploadStatus');
+//     const fileInput = document.getElementById('inputFile');
+
+//     const files = fileInput.files;
+
+//     if (files.length === 0) {
+//         messageDiv.innerHTML = '<div class="alert alert-warning">Ingen filer valgt!</div>';
+//         return;
+//     }
+
+//     messageDiv.innerHTML = `<div class="alert alert-info">Laster opp bilder, vennligst vent...</div>`;
+
+//     const formData = new FormData();
+
+//     // Append multiple files
+//     for (let i = 0; i < files.length; i++) {
+//         formData.append('files', files[i]); // 'files' should match the backend field name
+//     }
+
+//     try {
+//         const response = await fetch('https://teknix.no/chakims/gallery', {
+//             method: 'POST',
+//             body: formData,
+//             headers: {
+//                 'Authorization': 'chakims6969'
+//             },
+//             mode: 'cors'
+//         });
+
+//         const result = await response.json();
+//         messageDiv.innerHTML = `<div class="alert alert-success">Vellykket &check;</div>`;
+//         populateGallery();
+//         emptyUploadStatusDivs();
+//         console.log('Uploaded Files! ', result);
+//     } catch (error) {
+//         console.error('Error uploading files:', error);
+//         messageDiv.innerHTML = `<div class="alert alert-danger">En feil oppstod, kunne ikke laste opp bilde &cross;</div>`;
+//         emptyUploadStatusDivs();
+//     }
+// });
+
+document.getElementById('galleryUploadFormWedding').addEventListener('submit', function(e) {
     e.preventDefault();
-    console.log("Submitting wedding gallery POST...");
 
     const messageDiv = document.getElementById('galleryUploadStatusWedding');
     const fileInput = document.getElementById('inputFileWedding');
-
     const files = fileInput.files;
 
     if (files.length === 0) {
@@ -558,36 +628,105 @@ document.getElementById('galleryUploadFormWedding').addEventListener('submit', a
         return;
     }
 
-    messageDiv.innerHTML = `<div class="alert alert-info">Laster opp bilder, vennligst vent...</div>`;
+    messageDiv.innerHTML = ''; // clear previous
 
-    const formData = new FormData();
-
-    // Append multiple files
+    // Create a progress div for each file
+    const progressBars = [];
     for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i]); // 'files' should match the backend field name
+        const file = files[i];
+        const progressWrapper = document.createElement('div');
+        progressWrapper.className = 'mb-2';
+        progressWrapper.innerHTML = `
+            <div class="progress">
+                <div style="width:30%;">${file.name}</div>
+                <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
+            </div>
+        `;
+        messageDiv.appendChild(progressWrapper);
+        progressBars.push(progressWrapper.querySelector('.progress-bar'));
     }
 
-    try {
-        const response = await fetch('https://teknix.no/chakims/gallerywedding', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Authorization': 'chakims6969'
-            },
-            mode: 'cors'
+    // Upload each file individually to track progress
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append('files', file);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://teknix.no/chakims/gallerywedding');
+
+        xhr.setRequestHeader('Authorization', 'chakims6969');
+
+        xhr.upload.addEventListener('progress', (event) => {
+            if (event.lengthComputable) {
+                const percent = Math.round((event.loaded / event.total) * 100);
+                progressBars[i].style.width = percent + '%';
+                progressBars[i].textContent = percent + '%';
+            }
         });
 
-        const result = await response.json();
-        messageDiv.innerHTML = `<div class="alert alert-success">Vellykket &check;</div>`;
-        populateGallery();
-        emptyUploadStatusDivs();
-        console.log('Uploaded Files! ', result);
-    } catch (error) {
-        console.error('Error uploading files:', error);
-        messageDiv.innerHTML = `<div class="alert alert-danger">En feil oppstod, kunne ikke laste opp bilde &cross;</div>`;
-        emptyUploadStatusDivs();
+        xhr.addEventListener('load', () => {
+            progressBars[i].style.width = '100%';
+            progressBars[i].textContent = '✅ Ferdig';
+            if (i === files.length - 1) {
+                populateGallery(); // reload gallery after last file
+            }
+        });
+
+        xhr.addEventListener('error', () => {
+            progressBars[i].classList.add('bg-danger');
+            progressBars[i].textContent = '❌ Feil';
+        });
+
+        xhr.send(formData);
     }
 });
+
+
+// document.getElementById('galleryUploadFormWedding').addEventListener('submit', async function (e) {
+//     e.preventDefault();
+//     console.log("Submitting wedding gallery POST...");
+
+//     const messageDiv = document.getElementById('galleryUploadStatusWedding');
+//     const fileInput = document.getElementById('inputFileWedding');
+
+//     const files = fileInput.files;
+
+//     if (files.length === 0) {
+//         messageDiv.innerHTML = '<div class="alert alert-warning">Ingen filer valgt!</div>';
+//         return;
+//     }
+
+//     messageDiv.innerHTML = `<div class="alert alert-info">Laster opp bilder, vennligst vent...</div>`;
+
+//     const formData = new FormData();
+
+//     // Append multiple files
+//     for (let i = 0; i < files.length; i++) {
+//         formData.append('files', files[i]); // 'files' should match the backend field name
+//     }
+
+//     try {
+//         const response = await fetch('https://teknix.no/chakims/gallerywedding', {
+//             method: 'POST',
+//             body: formData,
+//             headers: {
+//                 'Authorization': 'chakims6969'
+//             },
+//             mode: 'cors'
+//         });
+
+//         const result = await response.json();
+//         messageDiv.innerHTML = `<div class="alert alert-success">Vellykket &check;</div>`;
+//         populateGallery();
+//         emptyUploadStatusDivs();
+//         console.log('Uploaded Files! ', result);
+//     } catch (error) {
+//         console.error('Error uploading files:', error);
+//         messageDiv.innerHTML = `<div class="alert alert-danger">En feil oppstod, kunne ikke laste opp bilde &cross;</div>`;
+//         emptyUploadStatusDivs();
+//     }
+// });
 
 document.getElementById('guestbookForm').addEventListener('submit', async function (e) {
     e.preventDefault();
