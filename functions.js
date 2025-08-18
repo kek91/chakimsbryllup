@@ -85,6 +85,10 @@ try {
     if (window.navigation) {
         navigation.addEventListener('navigate', () => {
             setTimeout(() => {
+                if (location.href.indexOf("stopNav") !== -1) {
+                    console.log("Dont navigate! Fake popstate for gallery.");
+                    return;
+                }
                 setPageFromUrl();
                 killModals();
             }, 25);
@@ -312,6 +316,10 @@ function openModal(startIndex, gallery = "misc") {
   
     // save state so we can clean up next time
     window.__carouselState[carouselId] = { instance, handler };
+
+    if(location.href.indexOf("stopNav") === -1) {
+        history.pushState({ modalOpen: modalId }, '', `#galleri?stopNav=true`);
+    }
 }
   
 
