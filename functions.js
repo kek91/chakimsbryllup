@@ -160,9 +160,11 @@ async function populateGallery() {
         }
     
         // Open modal
-        const index = parseInt(galleryEl.getAttribute("data-index"), 10);
-        const gallery = galleryEl.getAttribute("data-gallery");
-        openModal(index, gallery);
+        if (galleryEl) {
+            const index = parseInt(galleryEl.getAttribute("data-index"), 10);
+            const gallery = galleryEl.getAttribute("data-gallery");
+            openModal(index, gallery);
+        }
     });
 }
 
