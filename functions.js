@@ -86,6 +86,7 @@ try {
         navigation.addEventListener('navigate', () => {
             setTimeout(() => {
                 setPageFromUrl();
+                killModals();
             }, 25);
         });
     } else {
@@ -309,8 +310,28 @@ function openModal(startIndex, gallery = "misc") {
   
     // save state so we can clean up next time
     window.__carouselState[carouselId] = { instance, handler };
-  }
+}
   
+
+function killModals() {
+    // Stop all playing videos
+    document.querySelectorAll("video").forEach(video => {
+        video.pause();
+        video.currentTime = 0; // reset to start
+    });
+
+    // Close all Bootstrap modals
+    const modals = document.querySelectorAll(".modal");
+    modals.forEach(modal => {
+        const bsModal = bootstrap.Modal.getInstance(modal);
+        if (bsModal) {
+            bsModal.hide();
+        }
+    });
+
+    console.log("Killed all modals and stopped videos.");
+}
+
 
 
 
