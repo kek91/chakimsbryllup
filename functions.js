@@ -194,13 +194,12 @@ async function populateOneGallery({ url, elSelector, storageKey, galleryName }) 
   
       let html = '<div class="row g-0">';
       images.forEach((img, index) => {
-        const imgsrc = `https://teknix.no/chakims${img}`;
-        const isVideo = imgsrc.endsWith(".mp4");
+        const bg = img.type === "video" ? img.thumb : img.src;
         html += `
           <div class="col-4 col-sm-3 col-md-2 galleryimage"
-               style="background-image:url('${isVideo ? "resources/gemini-video-thumbnail.png" : imgsrc}');"
+               style="background-image:url('https://teknix.no/chakims${bg}');"
                data-index="${index}" data-gallery="${galleryName}">
-            ${isAdmin() ? `<button class="btn btn-dark btn-sm" data-delete="${img}">&cross;</button>` : ""}
+            ${isAdmin() ? `<button class="btn btn-dark btn-sm" data-delete="${img.src}">&cross;</button>` : ""}
           </div>`;
       });
       html += `</div><small class="mt-2">Antall bilder: ${images.length}</small>`;
@@ -228,8 +227,8 @@ function openModal(startIndex, gallery = "misc") {
     const modalEl      = document.getElementById(modalId);
   
     const imagesKey = gallery === "wedding" ? "imagesForCarouselWedding" : "imagesForCarousel";
-    const images = JSON.parse(localStorage.getItem(imagesKey)) || [];
-    if (!images.length) return;
+    const items = JSON.parse(localStorage.getItem(imagesKey)) || [];
+    if (!items.length) return;
   
     // --- clean up any previous instance/listener on this carousel ---
     const prevState = window.__carouselState[carouselId];
@@ -240,30 +239,29 @@ function openModal(startIndex, gallery = "misc") {
     }
   
     // modular index helper (supports wrap-around)
-    const mod = (i) => (i + images.length) % images.length;
+    const mod = (i) => (i + items.length) % items.length;
   
     // create one slide element
     const createItem = (index, active = false) => {
-      const imgsrc = `https://teknix.no/chakims${images[mod(index)]}`;
-      const isVideo = imgsrc.endsWith(".mp4");
+      const itemData = items[mod(index)];
   
       const item = document.createElement("div");
       item.className = `carousel-item${active ? " active" : ""}`;
       item.dataset.index = String(mod(index));
   
-      if (isVideo) {
+      if (itemData.type === "video") {
         const v = document.createElement("video");
         v.className = "d-block w-100";
         v.controls = true;
         v.preload = "metadata";
-        v.src = imgsrc;
+        v.src = `https://teknix.no/chakims${itemData.src}`;
         item.appendChild(v);
       } else {
         const img = document.createElement("img");
         img.className = "d-block w-100";
         img.loading = "lazy";
         img.alt = "Image";
-        img.src = imgsrc;
+        img.src = `https://teknix.no/chakims${itemData.src}`;
         item.appendChild(img);
       }
       return item;
@@ -313,7 +311,7 @@ function openModal(startIndex, gallery = "misc") {
         if (activeVideo) {
           activeVideo.play();
         }
-      },100);
+      }, 100);
     };
   
     carouselEl.addEventListener("slid.bs.carousel", handler);
@@ -326,6 +324,7 @@ function openModal(startIndex, gallery = "misc") {
         history.pushState({ modalOpen: modalId }, '', `#galleri?stopNav=true`);
     }
 }
+
   
 
 function killModals() {
