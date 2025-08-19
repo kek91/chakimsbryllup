@@ -195,11 +195,13 @@ async function populateOneGallery({ url, elSelector, storageKey, galleryName }) 
       let html = '<div class="row g-0">';
       images.forEach((img, index) => {
         const bg = img.type === "video" ? img.thumb : img.src;
+        const icon = img.type === "video" ? `<div class="video-overlay"><span class="play-icon">&#9658;</span></div>` : "";
         html += `
           <div class="col-4 col-sm-3 col-md-2 galleryimage"
                style="background-image:url('https://teknix.no/chakims${bg}');"
                data-index="${index}" data-gallery="${galleryName}">
             ${isAdmin() ? `<button class="btn btn-dark btn-sm" data-delete="${img.src}">&cross;</button>` : ""}
+            ${icon}
           </div>`;
       });
       html += `</div><small class="mt-2">Antall bilder: ${images.length}</small>`;
