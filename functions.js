@@ -308,11 +308,16 @@ function openModal(startIndex, gallery = "misc") {
       carouselInner.appendChild(createItem(newNext, false));
   
       // auto-play active video (optional)
-      const activeVideo = carouselInner.querySelector(".carousel-item.active video");
-      if (activeVideo) activeVideo.play();
+      setTimeout(() => {
+        const activeVideo = carouselInner.querySelector(".carousel-item.active video");
+        if (activeVideo) {
+          activeVideo.play();
+        }
+      },100);
     };
   
     carouselEl.addEventListener("slid.bs.carousel", handler);
+    handler();
   
     // save state so we can clean up next time
     window.__carouselState[carouselId] = { instance, handler };
