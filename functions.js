@@ -200,7 +200,7 @@ async function populateOneGallery({ url, elSelector, storageKey, galleryName }) 
           <div class="col-4 col-sm-3 col-md-2 galleryimage"
                style="background-image:url('https://teknix.no/chakims${bg}');"
                data-index="${index}" data-gallery="${galleryName}">
-            ${isAdmin() ? `<button class="btn btn-dark btn-sm" data-delete="${img.src}">&cross;</button>` : ""}
+            ${isAdmin() && isEditMode() ? `<button class="btn btn-dark btn-sm" data-delete="${img.src}">&cross;</button>` : ""}
             ${icon}
           </div>`;
       });
@@ -387,19 +387,53 @@ async function populateGuestbook() {
         let html = `<div class="row">`;
         data.greetings.forEach(entry => {
             html += `<div class="col-md-6 col-lg-4 my-3">
-                <div class="card bg-warning-subtle">
+                <div class="card bg-warning-subtle position-relative">
                     <div class="card-body">
                         <p class="card-text">${entry.greeting}</p>
-                        <p class="card-text float-start">
-                            <button class="btn btn-danger btn-sm m-0" onclick="likeGreeting('${entry.id}')">&hearts; ${entry.likes || ''}</button>
-                        </p>
-                        <p class="card-text text-end float-end"><small class="text-muted">${new Date(entry.id).toLocaleString()}</small></p>
-                        ${isAdmin() ? `<button class="btn btn-dark btn-sm position-absolute top-0 end-0 m-0" onclick="deleteGreeting('${entry.id}')">&cross;</button>` : ''}
+                        <div class="clearfix">
+                            <p class="card-text float-start">
+                                <button class="btn btn-danger btn-sm m-0" onclick="likeGreeting('${entry.id}')">
+                                    &hearts; ${entry.likes || ''}
+                                </button>
+                            </p>
+                            <p class="card-text text-end float-end">
+                                <small class="text-muted">${new Date(entry.id).toLocaleString()}</small>
+                            </p>
+                        </div>
+
+                        <!-- Admin delete button -->
+                        ${isAdmin() && isEditMode() ? `
+                            <button class="btn btn-dark btn-sm position-absolute top-0 end-0 m-0" onclick="deleteGreeting('${entry.id}')">&cross;</button>
+                        ` : ''}
+
+                        <!-- Reply section -->
+                        ${entry.reply ? `
+                            <div id="reply-${entry.id}">
+                                <div class="p-1 border rounded" style="background:rgba(255,255,255,0.5); font-size:1rem;">
+                                    <b>Svar:</b><br>${entry.reply}
+                                    ${isAdmin() && isEditMode() ? `
+                                        <div class="text-end">
+                                            <button class="btn btn-link btn-sm" onclick="editReply('${entry.id}', '${entry.reply.replace(/'/g, "\\'")}')">✎ Rediger</button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        ` : (isAdmin() && isEditMode() ? `
+                            <form class="mt-3" onsubmit="submitReply(event, '${entry.id}')">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Skriv et svar..." name="reply" required>
+                                    <button class="btn btn-primary btn-sm" type="submit">Svar</button>
+                                </div>
+                            </form>
+                        ` : '')}
                     </div>
                 </div>
             </div>`;
         });
         html += `</div>`;
+
+
+
 
         el.innerHTML = html;
 
@@ -412,6 +446,58 @@ async function populateGuestbook() {
         </div>`;
     }
 }
+
+/** Guestbook reply */
+
+function editReply(id, currentReply) {
+    const replyDiv = document.getElementById(`reply-${id}`);
+    replyDiv.innerHTML = `
+        <form onsubmit="submitReply(event, '${id}')">
+            <div class="input-group mt-2">
+                <input type="text" class="form-control form-control-sm" name="reply" value="${currentReply}" required>
+                <button class="btn btn-primary btn-sm" type="submit">Lagre</button>
+                <button class="btn btn-secondary btn-sm" type="button" onclick="cancelEditReply('${id}', '${currentReply.replace(/'/g, "\\'")}')">Avbryt</button>
+            </div>
+        </form>
+    `;
+}
+function cancelEditReply(id, currentReply) {
+    const replyDiv = document.getElementById(`reply-${id}`);
+    replyDiv.innerHTML = `
+        <div class="p-1 border rounded" style="background:rgba(255,255,255,0.5); font-size:1rem;">
+            <b>Svar:</b><br>${currentReply}
+            ${isAdmin() && isEditMode() ? `
+                <div class="text-end">
+                    <button class="btn btn-link btn-sm" onclick="editReply('${id}', '${currentReply.replace(/'/g, "\\'")}')">✎ Rediger</button>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+function submitReply(e, id) {
+    e.preventDefault();
+    const form = e.target;
+    const replyMsg = form.reply.value.trim();
+    if (!replyMsg) return;
+
+    fetch(`https://teknix.no/chakims/greeting/${id}/reply`, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'chakims6969' 
+        },
+        mode: 'cors',
+        body: JSON.stringify({ reply: replyMsg })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('Reply saved:', data);
+        // Refresh guestbook UI or update this card directly
+        populateGuestbook(); // if you already have a refresh function
+    })
+    .catch(err => console.error('Error saving reply:', err));
+}
+
 
 
 
@@ -461,7 +547,7 @@ function populateGuestlist() {
     el.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Laster...</span></div></div>';
     setTimeout(() => {
 
-        if(isModerator()) {
+        if(isAdmin() || isModerator()) {
             let html = '<ul class="list-group">';
             guestList.forEach(guest => {
                 html += `<li class="list-group-item" style="background:rgba(255,255,255,0.3);">${guest}</li>`;
@@ -576,51 +662,6 @@ document.getElementById('galleryUploadForm').addEventListener('submit', function
     }
 });
 
-
-// document.getElementById('galleryUploadForm').addEventListener('submit', async function (e) {
-//     e.preventDefault();
-//     console.log("Submitting gallery POST...");
-
-//     const messageDiv = document.getElementById('galleryUploadStatus');
-//     const fileInput = document.getElementById('inputFile');
-
-//     const files = fileInput.files;
-
-//     if (files.length === 0) {
-//         messageDiv.innerHTML = '<div class="alert alert-warning">Ingen filer valgt!</div>';
-//         return;
-//     }
-
-//     messageDiv.innerHTML = `<div class="alert alert-info">Laster opp bilder, vennligst vent...</div>`;
-
-//     const formData = new FormData();
-
-//     // Append multiple files
-//     for (let i = 0; i < files.length; i++) {
-//         formData.append('files', files[i]); // 'files' should match the backend field name
-//     }
-
-//     try {
-//         const response = await fetch('https://teknix.no/chakims/gallery', {
-//             method: 'POST',
-//             body: formData,
-//             headers: {
-//                 'Authorization': 'chakims6969'
-//             },
-//             mode: 'cors'
-//         });
-
-//         const result = await response.json();
-//         messageDiv.innerHTML = `<div class="alert alert-success">Vellykket &check;</div>`;
-//         populateGallery();
-//         emptyUploadStatusDivs();
-//         console.log('Uploaded Files! ', result);
-//     } catch (error) {
-//         console.error('Error uploading files:', error);
-//         messageDiv.innerHTML = `<div class="alert alert-danger">En feil oppstod, kunne ikke laste opp bilde &cross;</div>`;
-//         emptyUploadStatusDivs();
-//     }
-// });
 
 document.getElementById('galleryUploadFormWedding').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -833,6 +874,10 @@ function deleteImage(filename, gallery = "misc") {
 
 /** Admin stuff */
 async function authenticateAdmin() {
+    if (isAdmin()) {
+        console.log("Already authenticated");
+        return;
+    }
     const prompt = "Skriv inn passordet for å få tilgang til admin-funksjonalitet:";
     const password = window.prompt(prompt);
 
@@ -863,6 +908,12 @@ async function authenticateAdmin() {
         localStorage.removeItem("admin");
     }
 }
+function logout() {
+    localStorage.removeItem("admin");
+    localStorage.removeItem("editMode");
+    localStorage.removeItem("moderator");
+    location.reload();
+}
 function authenticateModerator() {
     const prompt = window.prompt("Skriv inn moderator passord:");
     if (prompt === "jøa25") {
@@ -870,11 +921,36 @@ function authenticateModerator() {
         populateGuestlist();
     }
 }
+function toggleEditMode() {
+    const editMode = localStorage.getItem("editMode") === "true";
+    if (editMode) {
+        localStorage.removeItem("editMode");
+        console.log("Edit mode disabled.");
+    } else {
+        localStorage.setItem("editMode", "true");
+        console.log("Edit mode enabled.");
+    }
+    location.reload();
+}
 function isAdmin() {
     return localStorage.getItem("admin") === "true";
 }
+function isEditMode() {
+    return localStorage.getItem("editMode") === "true";
+}
 function isModerator() {
     return localStorage.getItem("moderator") === "true";
+}
+function showAdminPanel() {
+    galleryAdminPanel = document.querySelectorAll(".galleryAdminPanel");
+    if (galleryAdminPanel) {
+        console.log("Found gallery admin panel elements, showing them if admin...");
+        if (isAdmin()) {
+            galleryAdminPanel.forEach((panel) => {
+                panel.style.display = "block";
+            });
+        }
+    }
 }
 
 
@@ -958,4 +1034,6 @@ setTimeout(() => {
     document.querySelectorAll(".confetti-button").forEach((el) => {
         el.addEventListener("click", launchConfetti);
     });
+
+    showAdminPanel();
 },100);
