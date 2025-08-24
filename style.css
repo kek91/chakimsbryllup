@@ -77,11 +77,11 @@ img.heart:hover {
 
 
 /** BG FOR MAIN PAGES */
-#forsiden, #praktisk-info, #kart, #program, #reisetips, #galleri, #gjestebok {
+#forsiden, #endelig-gift, #praktisk-info, #kart, #program, #reisetips, #galleri, #gjestebok {
     background: rgb(255,249,241);
     background: linear-gradient(180deg, rgba(255,249,241,1) 0%, rgba(230,202,174,1) 100%);
 }
-#praktisk-info, #kart, #program, #reisetips, #galleri, #gjestebok {
+#endelig-gift, #praktisk-info, #kart, #program, #reisetips, #galleri, #gjestebok {
     padding-top:50px;
 }
 

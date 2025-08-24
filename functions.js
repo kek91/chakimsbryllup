@@ -6,6 +6,7 @@ function navigateToPage(page) {
 
     const pageElements = [
         "forsiden",
+        "endelig-gift",
         "praktisk-info",
         "program",
         "kart",
@@ -56,6 +57,8 @@ function setPageFromUrl() {
     const url = window.location.href;
     if (url.includes("forsiden")) {
         navigateToPage("forsiden");
+    } else if (url.includes("endelig-gift")) {
+        navigateToPage("endelig-gift");
     } else if (url.includes("praktisk-info")) {
         navigateToPage("praktisk-info");
         populateGuestlist();
