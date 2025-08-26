@@ -136,25 +136,37 @@ window.__carouselState = window.__carouselState || {};
 
 async function populateGallery() {
 
-    await populateOneGallery({
-      url: "https://teknix.no/chakims/gallerywedding",
-      elSelector: "#galleryimagesWedding",
-      storageKey: "imagesForCarouselWedding",
-      galleryName: "wedding"
-    });
+    // await populateOneGallery({
+    //   url: "https://teknix.no/chakims/gallerywedding",
+    //   elSelector: "#galleryimagesWedding",
+    //   storageKey: "imagesForCarouselWedding",
+    //   galleryName: "wedding"
+    // });
   
-    await populateOneGallery({
-      url: "https://teknix.no/chakims/gallery",
-      elSelector: "#galleryimages",
-      storageKey: "imagesForCarousel",
-      galleryName: "misc"
-    });
+    // await populateOneGallery({
+    //   url: "https://teknix.no/chakims/gallery",
+    //   elSelector: "#galleryimages",
+    //   storageKey: "imagesForCarousel",
+    //   galleryName: "misc"
+    // });
+
+    const response = await fetch("https://teknix.no/chakims/gallerywedding", {
+        headers: { Authorization: "chakims6969" },
+        mode: "cors"
+      });
+
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+    const images = await response.json();
+
+    renderGallery({ images, container: '#galleryimagesWedding', galleryName: 'wedding', wideThreshold: 1.3 });
+
 
     console.log('Setting up event listeners for image galleries...');
 
     // Handle gallery clicks (open modal or delete image)
     document.addEventListener("click", (e) => {
-        const galleryEl = e.target.closest(".galleryimage");
+        const galleryEl = e.target.closest(".galleryitem");
         // if (!galleryEl) return;
     
         // Delete button clicked?
@@ -195,19 +207,82 @@ async function populateOneGallery({ url, elSelector, storageKey, galleryName }) 
       const images = await response.json();
       localStorage.setItem(storageKey, JSON.stringify(images));
   
-      let html = '<div class="row g-0">';
-      images.forEach((img, index) => {
-        const bg = img.type === "video" ? img.thumb : img.src;
-        const icon = img.type === "video" ? `<div class="video-overlay"><span class="play-icon">&#9658;</span></div>` : "";
+    //   let html = '<div class="row g-0">';
+    //   images.forEach((img, index) => {
+    //     const bg = img.type === "video" ? img.thumb : img.src;
+    //     const icon = img.type === "video" ? `<div class="video-overlay"><span class="play-icon">&#9658;</span></div>` : "";
+    //     html += `
+    //       <div class="col-4 col-sm-3 col-md-2 galleryimage"
+    //            style="background-image:url('https://teknix.no/chakims${bg}');"
+    //            data-index="${index}" data-gallery="${galleryName}">
+    //         ${isAdmin() && isEditMode() ? `<button class="btn btn-dark btn-sm" data-delete="${img.src}">&cross;</button>` : ""}
+    //         ${icon}
+    //       </div>`;
+    //   });
+    //   html += `</div><small class="mt-2">Antall bilder: ${images.length}</small>`;
+
+        let html = '<div class="gallery">';
+        images.forEach((img, index) => {
+        const src = img.type === "video" ? img.thumb : img.src;
+        const icon = img.type === "video"
+            ? `<div class="video-overlay"><span class="play-icon">&#9658;</span></div>`
+            : "";
+
+        // Automatically mark wide images
+        const spanClass = (img.width > img.height * 1.3) ? "wide" : ""; 
+
         html += `
-          <div class="col-4 col-sm-3 col-md-2 galleryimage"
-               style="background-image:url('https://teknix.no/chakims${bg}');"
-               data-index="${index}" data-gallery="${galleryName}">
+            <div class="galleryitem ${spanClass}" data-index="${index}" data-gallery="${galleryName}">
+            <img src="https://teknix.no/chakims${src}" loading="lazy" />
             ${isAdmin() && isEditMode() ? `<button class="btn btn-dark btn-sm" data-delete="${img.src}">&cross;</button>` : ""}
             ${icon}
-          </div>`;
-      });
-      html += `</div><small class="mt-2">Antall bilder: ${images.length}</small>`;
+            </div>`;
+        });
+        html += `</div><small class="mt-2">Antall bilder: ${images.length}</small>`;
+
+
+        // 2) After insertion, calculate row spans so items pack row-wise
+function computeRowSpan(item, grid) {
+  const rowHeight = parseInt(getComputedStyle(grid).getPropertyValue('grid-auto-rows'), 10);
+  const gap = parseInt(getComputedStyle(grid).getPropertyValue('gap'), 10);
+  const img = item.querySelector('img');
+
+  // Use the image's rendered height
+  const h = img?.getBoundingClientRect().height || item.getBoundingClientRect().height;
+  const span = Math.ceil((h + gap) / (rowHeight + gap));
+  item.style.gridRowEnd = `span ${span}`;
+}
+
+function layoutGrid(grid) {
+  const items = grid.querySelectorAll('.galleryitem');
+  items.forEach(item => computeRowSpan(item, grid));
+}
+
+function initMasonryGrid(root = document) {
+  const grid = root.querySelector('.gallery');
+  if (!grid) return;
+
+  // Run once images have loaded (and also for cached images)
+  grid.querySelectorAll('.galleryitem img').forEach(img => {
+    const item = img.closest('.galleryitem');
+    if (img.complete) {
+      computeRowSpan(item, grid);
+    } else {
+      img.addEventListener('load', () => computeRowSpan(item, grid), { once: true });
+    }
+  });
+
+  // Fallback pass + resize handling
+  requestAnimationFrame(() => layoutGrid(grid));
+  window.addEventListener('resize', () => layoutGrid(grid));
+}
+
+// Call after you inject the gallery HTML
+initMasonryGrid();
+
+
+
+
   
       el.innerHTML = html;
     } catch (err) {
@@ -731,52 +806,6 @@ document.getElementById('galleryUploadFormWedding').addEventListener('submit', f
         xhr.send(formData);
     }
 });
-
-
-// document.getElementById('galleryUploadFormWedding').addEventListener('submit', async function (e) {
-//     e.preventDefault();
-//     console.log("Submitting wedding gallery POST...");
-
-//     const messageDiv = document.getElementById('galleryUploadStatusWedding');
-//     const fileInput = document.getElementById('inputFileWedding');
-
-//     const files = fileInput.files;
-
-//     if (files.length === 0) {
-//         messageDiv.innerHTML = '<div class="alert alert-warning">Ingen filer valgt!</div>';
-//         return;
-//     }
-
-//     messageDiv.innerHTML = `<div class="alert alert-info">Laster opp bilder, vennligst vent...</div>`;
-
-//     const formData = new FormData();
-
-//     // Append multiple files
-//     for (let i = 0; i < files.length; i++) {
-//         formData.append('files', files[i]); // 'files' should match the backend field name
-//     }
-
-//     try {
-//         const response = await fetch('https://teknix.no/chakims/gallerywedding', {
-//             method: 'POST',
-//             body: formData,
-//             headers: {
-//                 'Authorization': 'chakims6969'
-//             },
-//             mode: 'cors'
-//         });
-
-//         const result = await response.json();
-//         messageDiv.innerHTML = `<div class="alert alert-success">Vellykket &check;</div>`;
-//         populateGallery();
-//         emptyUploadStatusDivs();
-//         console.log('Uploaded Files! ', result);
-//     } catch (error) {
-//         console.error('Error uploading files:', error);
-//         messageDiv.innerHTML = `<div class="alert alert-danger">En feil oppstod, kunne ikke laste opp bilde &cross;</div>`;
-//         emptyUploadStatusDivs();
-//     }
-// });
 
 document.getElementById('guestbookForm').addEventListener('submit', async function (e) {
     e.preventDefault();
