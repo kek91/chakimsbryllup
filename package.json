@@ -4,11 +4,13 @@
     "description": "Frontend website for chakimsbryllup.no",
     "main": "index.html",
     "scripts": {
-      "build": "echo ok"
+      "build": "echo ok",
+      "start": "serve -s . -l 3000"
     },
     "author": "Kim Eirik Kvassheim",
     "license": "MIT",
     "dependencies": {
+      "serve": "14.2.6"
     },
     "devDependencies": {
     }
