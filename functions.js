@@ -372,7 +372,7 @@ async function populateGuestbook() {
         </div>`;
 
         // Fetch greetings from the server
-        const response = await fetch('https://teknix.no/chakims/greetings', {
+        const response = await fetch('https://api.chakimsbryllup.no/chakims/greetings', {
             method: 'GET',
             headers: {
                 'Authorization': 'chakims6969'
