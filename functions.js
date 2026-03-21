@@ -137,14 +137,14 @@ window.__carouselState = window.__carouselState || {};
 async function populateGallery() {
 
     await populateOneGallery({
-      url: "https://teknix.no/chakims/gallerywedding",
+      url: "https://api.chakimsbryllup.no/chakims/gallerywedding",
       elSelector: "#galleryimagesWedding",
       storageKey: "imagesForCarouselWedding",
       galleryName: "wedding"
     });
   
     await populateOneGallery({
-      url: "https://teknix.no/chakims/gallery",
+      url: "https://api.chakimsbryllup.no/chakims/gallery",
       elSelector: "#galleryimages",
       storageKey: "imagesForCarousel",
       galleryName: "misc"
@@ -201,7 +201,7 @@ async function populateOneGallery({ url, elSelector, storageKey, galleryName }) 
         const icon = img.type === "video" ? `<div class="video-overlay"><span class="play-icon">&#9658;</span></div>` : "";
         html += `
           <div class="col-4 col-sm-3 col-md-2 galleryimage"
-               style="background-image:url('https://teknix.no/chakims${bg}');"
+               style="background-image:url('https://api.chakimsbryllup.no/chakims${bg}');"
                data-index="${index}" data-gallery="${galleryName}">
             ${isAdmin() && isEditMode() ? `<button class="btn btn-dark btn-sm" data-delete="${img.src}">&cross;</button>` : ""}
             ${icon}
@@ -259,14 +259,14 @@ function openModal(startIndex, gallery = "misc") {
         v.className = "d-block w-100";
         v.controls = true;
         v.preload = "metadata";
-        v.src = `https://teknix.no/chakims${itemData.src}`;
+        v.src = `https://api.chakimsbryllup.no/chakims${itemData.src}`;
         item.appendChild(v);
       } else {
         const img = document.createElement("img");
         img.className = "d-block w-100";
         img.loading = "lazy";
         img.alt = "Image";
-        img.src = `https://teknix.no/chakims${itemData.src}`;
+        img.src = `https://api.chakimsbryllup.no/chakims${itemData.src}`;
         item.appendChild(img);
       }
       return item;
@@ -483,7 +483,7 @@ function submitReply(e, id) {
     const replyMsg = form.reply.value.trim();
     if (!replyMsg) return;
 
-    fetch(`https://teknix.no/chakims/greeting/${id}/reply`, {
+    fetch(`https://api.chakimsbryllup.no/chakims/greeting/${id}/reply`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -636,7 +636,7 @@ document.getElementById('galleryUploadForm').addEventListener('submit', function
         formData.append('files', file);
 
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://teknix.no/chakims/gallery');
+        xhr.open('POST', 'https://api.chakimsbryllup.no/chakims/gallery');
 
         xhr.setRequestHeader('Authorization', 'chakims6969');
 
@@ -703,7 +703,7 @@ document.getElementById('galleryUploadFormWedding').addEventListener('submit', f
         formData.append('files', file);
 
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://teknix.no/chakims/gallerywedding');
+        xhr.open('POST', 'https://api.chakimsbryllup.no/chakims/gallerywedding');
 
         xhr.setRequestHeader('Authorization', 'chakims6969');
 
@@ -757,7 +757,7 @@ document.getElementById('galleryUploadFormWedding').addEventListener('submit', f
 //     }
 
 //     try {
-//         const response = await fetch('https://teknix.no/chakims/gallerywedding', {
+//         const response = await fetch('https://api.chakimsbryllup.no/chakims/gallerywedding', {
 //             method: 'POST',
 //             body: formData,
 //             headers: {
@@ -786,7 +786,7 @@ document.getElementById('guestbookForm').addEventListener('submit', async functi
 
     if (greeting) {
         try {
-            const response = await fetch('https://teknix.no/chakims/greeting', {
+            const response = await fetch('https://api.chakimsbryllup.no/chakims/greeting', {
                 method: 'POST',
                 body: JSON.stringify({ greeting: greeting }),
                 headers: {
@@ -819,7 +819,7 @@ document.getElementById('guestbookForm').addEventListener('submit', async functi
 function deleteGreeting(id) {
     if (confirm("Er du sikker på at du vil slette denne hilsenen?")) {
         try {
-            fetch(`https://teknix.no/chakims/greeting/${id}`, {
+            fetch(`https://api.chakimsbryllup.no/chakims/greeting/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': 'chakims6969'
@@ -838,7 +838,7 @@ function deleteGreeting(id) {
 function likeGreeting(id) {
     
     try {
-        fetch(`https://teknix.no/chakims/greeting/${id}/like`, {
+        fetch(`https://api.chakimsbryllup.no/chakims/greeting/${id}/like`, {
             method: 'POST',
             headers: {
                 'Authorization': 'chakims6969'
@@ -858,7 +858,7 @@ function deleteImage(filename, gallery = "misc") {
         try {
             const file = filename.split("/").pop();
             const endpoint = gallery === "wedding" ? 'gallerywedding' : 'gallery';
-            fetch(`https://teknix.no/chakims/${endpoint}/${file}`, {
+            fetch(`https://api.chakimsbryllup.no/chakims/${endpoint}/${file}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': 'chakims6969'
@@ -885,7 +885,7 @@ async function authenticateAdmin() {
     const password = window.prompt(prompt);
 
     try {
-        const response = await fetch(`https://teknix.no/chakims/admin`, {
+        const response = await fetch(`https://api.chakimsbryllup.no/chakims/admin`, {
             method: 'POST',
             headers: {
                 'Authorization': 'chakims6969',
@@ -990,7 +990,7 @@ async function sendVisitorStats() {
         };
 
         // Send to backend
-        // await fetch("https://teknix.no/chakims/stats", {
+        // await fetch("https://api.chakimsbryllup.no/chakims/stats", {
         //     method: "POST",
         //     headers: {
         //         "Content-Type": "application/json",
